@@ -467,61 +467,90 @@ function debug(msg) {
 /* ═══════════════════════════════════════════════
    CARGA DE DATOS
 ═══════════════════════════════════════════════ */
+
+// Intenta fetch directo; si falla por CORS hace fallback a proxies
+async function fetchCSVText() {
+  const proxies = [
+    CSV_URL,
+    'https://corsproxy.io/?' + encodeURIComponent(CSV_URL),
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL),
+  ];
+
+  let lastErr = null;
+  for (const url of proxies) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      if (!text || text.trim().length < 10) throw new Error('Respuesta vacía');
+      console.log('✅ CSV cargado desde:', url.length > 80 ? url.slice(0,80) + '…' : url);
+      return text;
+    } catch (e) {
+      console.warn('⚠️ Falló:', url.slice(0, 60) + '…', '→', e.message);
+      lastErr = e;
+    }
+  }
+  throw new Error('Todos los intentos fallaron. Último error: ' + (lastErr?.message || 'desconocido'));
+}
+
+function processCSVText(text) {
+  const results = Papa.parse(text, { header: true, skipEmptyLines: true });
+
+  if (!results.data || results.data.length === 0) {
+    showError('El CSV llegó vacío o sin datos. Verifica que la hoja esté publicada correctamente en Google Sheets (Archivo → Compartir → Publicar en la web).');
+    return;
+  }
+
+  // Log estructura (consola)
+  const cols = Object.keys(results.data[0]);
+  console.group('📊 Float Chile — Estructura CSV');
+  console.log('Columnas encontradas:', cols);
+  console.log('Total filas:', results.data.length);
+  console.log('Primeras 3 filas:', results.data.slice(0,3));
+  const tipos = {};
+  cols.forEach(c => {
+    const sample = results.data.slice(0,5).map(r => r[c]).filter(Boolean);
+    if (sample.some(v => String(v).includes('$') || /^\d+\.?\d*$/.test(String(v).replace(/[$.,]/g,'')))) tipos[c] = 'número/moneda';
+    else if (sample.some(v => /\d+\/\d+\/\d+/.test(String(v)))) tipos[c] = 'fecha';
+    else tipos[c] = 'texto';
+  });
+  console.log('Tipos detectados:', tipos);
+  console.groupEnd();
+
+  // Filtrar filas con Monto válido
+  allRows = results.data.filter(r => r['Monto'] && parseMonto(r['Monto']) > 0);
+
+  if (allRows.length === 0) {
+    showError('Se recibieron ' + results.data.length + ' filas pero ninguna tiene un Monto válido. Revisa el formato de la columna "Monto".');
+    return;
+  }
+
+  populateFilters();
+  applyFilters();
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  const now = new Date();
+  const ts = now.toLocaleDateString('es-CL') + ' ' + now.toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
+  document.getElementById('last-updated').innerHTML = 'Actualizado: <strong>' + ts + '</strong><br><span style="font-size:11px">' + allRows.length + ' registros cargados</span>';
+}
+
 function loadData() {
   document.getElementById('loading-state').style.display = 'flex';
   document.getElementById('error-state').style.display = 'none';
   document.getElementById('dashboard').style.display = 'none';
 
-  Papa.parse(CSV_URL, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      if (!results.data || results.data.length === 0) {
-        showError('El CSV llegó vacío o sin datos. Verifica que la hoja esté publicada correctamente en Google Sheets (Archivo → Compartir → Publicar en la web).');
-        return;
-      }
-
-      // Log estructura (consola)
-      const cols = Object.keys(results.data[0]);
-      console.group('📊 Float Chile — Estructura CSV');
-      console.log('Columnas encontradas:', cols);
-      console.log('Total filas:', results.data.length);
-      console.log('Primeras 3 filas:', results.data.slice(0,3));
-      const tipos = {};
-      cols.forEach(c => {
-        const sample = results.data.slice(0,5).map(r => r[c]).filter(Boolean);
-        if (sample.some(v => v.includes('$') || /^\d+\.?\d*$/.test(v.replace(/[$.,]/g,'')))) tipos[c] = 'número/moneda';
-        else if (sample.some(v => /\d+\/\d+\/\d+/.test(v))) tipos[c] = 'fecha';
-        else tipos[c] = 'texto';
-      });
-      console.log('Tipos detectados:', tipos);
-      console.groupEnd();
-
-      // Filtrar filas con Monto válido
-      allRows = results.data.filter(r => r['Monto'] && parseMonto(r['Monto']) > 0);
-
-      if (allRows.length === 0) {
-        showError('Se recibieron ' + results.data.length + ' filas pero ninguna tiene un Monto válido. Revisa el formato de la columna "Monto".');
-        return;
-      }
-
-      populateFilters();
-      applyFilters();
-
-      document.getElementById('loading-state').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-
-      const now = new Date();
-      const ts = now.toLocaleDateString('es-CL') + ' ' + now.toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
-      document.getElementById('last-updated').innerHTML = 'Actualizado: <strong>' + ts + '</strong><br><span style="font-size:11px">' + allRows.length + ' registros cargados</span>';
-    },
-    error: function(err) {
-      showError('No se pudo conectar con Google Sheets.<br><br>' +
-        'Verifica tu conexión o que el documento esté publicado.<br>' +
-        '<small style="opacity:0.6">Error: ' + (err.message || JSON.stringify(err)) + '</small>');
-    }
-  });
+  fetchCSVText()
+    .then(text => processCSVText(text))
+    .catch(err => {
+      showError(
+        'No se pudo conectar con Google Sheets.<br><br>' +
+        'Verifica tu conexión o que el documento esté publicado en Google Sheets ' +
+        '(Archivo → Compartir → Publicar en la web).<br><br>' +
+        '<small style="opacity:0.6">Detalle: ' + err.message + '</small>'
+      );
+    });
 }
 
 function showError(msg) {
