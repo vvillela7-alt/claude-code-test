@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumen House — Dashboard Financiero</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0e18;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+a{color:inherit}
+
+/* HEADER */
+header{text-align:center;padding:2.5rem 1rem 1.5rem;border-bottom:1px solid #1e2235}
+header h1{font-size:2rem;font-weight:300;letter-spacing:8px;color:#F5A623;text-transform:uppercase}
+header p{color:#64748b;font-size:.8rem;letter-spacing:3px;margin-top:.4rem;text-transform:uppercase}
+
+/* SCENARIO TABS */
+.tabs{display:flex;justify-content:center;gap:.5rem;padding:1.5rem 1rem 1rem;flex-wrap:wrap}
+.tab{padding:.55rem 1.4rem;border-radius:6px;border:1px solid #2a2b3d;background:#161722;color:#64748b;cursor:pointer;font-size:.82rem;letter-spacing:1px;transition:all .2s}
+.tab:hover{border-color:#F5A623;color:#F5A623}
+.tab.active{background:#F5A623;border-color:#F5A623;color:#0d0e18;font-weight:600}
+
+/* KPI CARDS */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;padding:0 1.5rem 1.5rem;max-width:1400px;margin:0 auto}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:#161722;border:1px solid #1e2235;border-radius:10px;padding:1.2rem 1rem;text-align:center;transition:border-color .2s}
+.kpi:hover{border-color:#F5A623}
+.kpi-label{font-size:.7rem;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem}
+.kpi-value{font-size:1.5rem;font-weight:600;color:#F5A623}
+.kpi-sub{font-size:.72rem;color:#475569;margin-top:.3rem}
+
+/* CHARTS GRID */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;padding:0 1.5rem 1.2rem;max-width:1400px;margin:0 auto}
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:#161722;border:1px solid #1e2235;border-radius:10px;padding:1.2rem}
+.chart-card h2{font-size:.75rem;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem}
+.chart-wrap{position:relative}
+
+/* TRAFFIC LIGHT */
+.traffic-section{max-width:1400px;margin:0 auto;padding:0 1.5rem 3rem}
+.traffic-section h2{font-size:.75rem;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem}
+.traffic-row{display:flex;gap:4px;flex-wrap:wrap}
+.traffic-cell{flex:1;min-width:48px;max-width:70px;border-radius:5px;padding:.5rem .2rem;text-align:center;font-size:.62rem;color:#000;font-weight:600;letter-spacing:.5px;transition:opacity .3s}
+.traffic-cell.green{background:#22c55e}
+.traffic-cell.yellow{background:#eab308}
+.traffic-cell.red{background:#ef4444;color:#fff}
+.traffic-cell .tval{font-size:.58rem;font-weight:400;margin-top:2px;opacity:.8}
+
+/* COMPARATOR TOGGLES */
+.comp-legend{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem}
+.comp-btn{padding:.3rem .8rem;border-radius:4px;border:1px solid;cursor:pointer;font-size:.72rem;font-weight:600;opacity:.5;transition:opacity .2s}
+.comp-btn.on{opacity:1}
+
+/* DIVIDER */
+.section-divider{height:1px;background:#1e2235;max-width:1400px;margin:.5rem auto 1.2rem}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem;color:#334155;font-size:.72rem;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Lumen House</h1>
+  <p>Dashboard Financiero Proyectado · Santiago, Chile · Apertura Jul 2026</p>
+</header>
+
+<div class="tabs" id="tabs">
+  <button class="tab" data-s="0">Muy Lento</button>
+  <button class="tab" data-s="1">Conservador</button>
+  <button class="tab active" data-s="2">Base</button>
+  <button class="tab" data-s="3">Acelerado</button>
+  <button class="tab" data-s="4">Exitoso</button>
+</div>
+
+<div class="kpis" id="kpis">
+  <div class="kpi"><div class="kpi-label">Punto de Equilibrio</div><div class="kpi-value" id="kpi-be">—</div><div class="kpi-sub">Caja acumulada positiva</div></div>
+  <div class="kpi"><div class="kpi-label">CAPEX Total</div><div class="kpi-value" id="kpi-capex">$138,7 M</div><div class="kpi-sub">Equity $90M · Deuda $60M</div></div>
+  <div class="kpi"><div class="kpi-label">Valle de Caja</div><div class="kpi-value" id="kpi-valley">—</div><div class="kpi-sub">Peor posición acumulada</div></div>
+  <div class="kpi"><div class="kpi-label">Ingreso Neto M24</div><div class="kpi-value" id="kpi-rev24">—</div><div class="kpi-sub">Jun 2028</div></div>
+  <div class="kpi"><div class="kpi-label">Meses en Rojo</div><div class="kpi-value" id="kpi-neg">—</div><div class="kpi-sub">Caja acumulada negativa</div></div>
+</div>
+
+<div class="charts-grid">
+  <div class="chart-card">
+    <h2>Flujo Neto Mensual</h2>
+    <div class="chart-wrap"><canvas id="barChart" height="220"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h2>Caja Acumulada</h2>
+    <div class="chart-wrap"><canvas id="lineChart" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="charts-grid">
+  <div class="chart-card">
+    <h2>Ingresos vs Costos Mensuales</h2>
+    <div class="chart-wrap"><canvas id="stackChart" height="220"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h2>Comparador de Escenarios — Caja Acumulada</h2>
+    <div class="comp-legend" id="compLegend"></div>
+    <div class="chart-wrap"><canvas id="compareChart" height="200"></canvas></div>
+  </div>
+</div>
+
+<div class="traffic-section">
+  <h2>Semáforo de Liquidez Mensual</h2>
+  <div class="traffic-row" id="trafficLight"></div>
+</div>
+
+<footer>Lumen House · Proyección Financiera 24 meses · Generado con datos de Flujo.xlsx · CLP</footer>
+
+<script>
+// ─── RAW DATA (from Flujo.xlsx) ────────────────────────────────────────────
+const MONTH_LABELS = ['Jul 26','Ago 26','Sep 26','Oct 26','Nov 26','Dic 26','Ene 27','Feb 27','Mar 27','Abr 27','May 27','Jun 27','Jul 27','Ago 27','Sep 27','Oct 27','Nov 27','Dic 27','Ene 28','Feb 28','Mar 28','Abr 28','May 28','Jun 28'];
+
+// Visit curves (total visits per month, 5 scenarios)
+const VISITS = [
+  [90,130,170,210,260,320,380,430,480,520,560,600,640,680,720,760,800,840,880,920,960,1000,1030,1060],
+  [120,180,240,300,360,430,500,560,620,680,740,800,860,920,980,1040,1100,1160,1220,1280,1320,1360,1400,1440],
+  [160,240,320,400,500,600,700,790,880,970,1050,1120,1190,1260,1330,1400,1470,1540,1600,1660,1720,1760,1800,1840],
+  [200,300,410,520,640,760,880,1000,1120,1240,1360,1460,1560,1660,1760,1860,1940,2000,2060,2120,2180,2220,2260,2300],
+  [240,360,500,650,800,950,1100,1240,1380,1520,1650,1780,1900,2020,2140,2260,2360,2440,2520,2600,2660,2720,2780,2840]
+];
+const MEMBERS = [
+  [50,52,55,58,62,68,74,80,86,92,98,104,110,116,122,128,134,140,144,148,152,156,158,160],
+  [50,54,58,62,68,76,84,92,100,108,116,124,132,140,148,156,164,172,178,182,186,188,190,190],
+  [51,56,62,68,78,88,98,108,118,128,138,148,158,168,178,188,198,208,216,222,226,228,230,230],
+  [53,58,66,74,86,98,110,122,134,146,158,170,182,194,206,218,230,242,254,264,270,275,280,280],
+  [55,60,70,80,94,108,122,136,150,164,178,192,206,220,234,248,262,276,290,302,312,320,328,330]
+];
+// Month index when Fase 2 starts (0-based): null = never within 24 months
+const FASE2_START = [null, 17, 13, 10, 7];
+
+// Base scenario exact values from Excel (Row indices from FCM sheet)
+const B_TICKET_VISITS = [109,184,258,332,422,512,602,682,762,842,912,972,1032,1092,1152,1212,1272,1332,1384,1438,1494,1532,1570,1610];
+const B_TICKET_NET   = [2931092,4947899,6937815,8927731,11347899,13768067,16188235,18339496,20490756,22642017,24524370,26137815,27751261,29364706,30978151,32591597,34205042,35818487,37216807,38668908,40174790,41196639,42218487,43294118];
+const B_PREMIUM_NET  = [362283,611560,857514,1103468,1402600,1701733,2000866,2266762,2532657,2798553,3031212,3230634,3430056,3629478,3828899,4028321,4227743,4427165,4599997,4779477,4965604,5091905,5218205,5351153];
+const B_MEMBER_NET   = [2558739,2852437,3204874,3557311,4144706,4732101,5319496,5906891,6494286,7081681,7669076,8256471,8843866,9431261,10018655,10606050,11193445,11780840,12250756,12603193,12838151,12955630,13073109,13073109];
+const B_UPSELL_NET   = [60504,90756,121008,151261,189076,226891,264706,298739,332773,366807,397059,423529,450000,476471,502941,529412,555882,582353,605042,627731,650420,665546,680672,695798];
+const B_EVENTS_NET   = [0,0,0,0,0,0,411765,411765,411765,411765,411765,411765,411765,823529,823529,823529,823529,823529,823529,823529,823529,823529,823529,823529];
+const B_NET_REV      = [5912619,8502653,11121211,13739770,17084281,20428792,24185068,27223652,30262237,33300822,36033481,38460214,40886947,43725444,46152177,48578910,51005642,53432375,55496132,57502838,59452495,60733249,62014003,63237708];
+const B_VAR_COSTS    = [253173,378954,504797,630640,788101,945562,1103930,1245708,1387485,1529263,1655357,1765768,1979369,2096810,2213294,2329777,2446261,2562744,2662550,2762222,2861763,2928079,2994395,3060578];
+const B_TOTAL_COSTS  = [13472301,14348081,14473925,17394998,17552459,17709920,17868288,18010065,18151843,18293621,18419715,18530126,19597399,28022965,28139449,28255932,28372416,28488900,28588705,28688378,28787918,28854234,28920550,28986734];
+const B_EBITDA       = [-7559681,-5845429,-3352713,-3655228,-468178,2718872,6316780,9213587,12110394,15007201,17613766,19930088,21289547,15702479,18012728,20322977,22633226,24943475,26907427,28814461,30664577,31879015,33093453,34250974];
+const B_F29          = [14782,21257,27803,34349,42711,51072,60463,68059,4049579,5170708,5680639,6133682,6988949,6992786,7475388,7957989,8440591,8923193,9333514,9732158,10119123,10373207,10627291,10869697];
+const B_BONUS        = [0,0,0,0,0,0,0,0,0,0,0,0,1693432,855372,1201909,1548447,1894984,2241521,2536114,2822169,3099687,3281852,3464018,3637646];
+const B_FLUJO        = [6421867,-5866685,-3380516,-3689577,-510888,2667800,5256317,8145527,7060815,8836493,10933126,12796405,11607165,6854320,8335431,9816541,11297651,12778761,14037798,15260133,16445767,17223955,18002144,18743630];
+const B_CUM_CASH     = [6421867,555182,-2825334,-6514911,-7025799,-4357999,898318,9043845,16104660,24941153,35874279,48670684,60277849,67132169,75467600,85284141,96581792,109360553,123398351,138658484,155104251,172328206,190330350,209073980];
+
+// Fixed costs by phase (CLP/month)
+const FC = {ramp:[13219128,13969128,13969128], f1y1:16764358, f2y1:24639358, f1y2:17618030, f2y2:25926155};
+const CAPEX_IVA = 16976590; // IVA credit from CAPEX investment
+
+// ─── COMPUTATION ───────────────────────────────────────────────────────────
+function computeScenario(s) {
+  if (s === 2) {
+    // Use exact Excel data for Base
+    return B_FLUJO.map((_, i) => ({
+      rev: B_NET_REV[i], costs: B_TOTAL_COSTS[i],
+      ebitda: B_EBITDA[i], flujo: B_FLUJO[i], cum: B_CUM_CASH[i]
+    }));
+  }
+  const v = VISITS[s], m = MEMBERS[s], f2 = FASE2_START[s];
+  const bv = VISITS[2], bm = MEMBERS[2];
+  let ivaCredit = CAPEX_IVA, cum = 0;
+
+  return Array.from({length:24}, (_, i) => {
+    const isY2 = i >= 12;
+    const inF2 = f2 !== null && i >= f2;
+
+    // Revenue: per-unit rates from Base
+    const tv = v[i] - m[i]; // ticket visits (non-members)
+    const tUnit = (B_TICKET_NET[i] + B_PREMIUM_NET[i]) / B_TICKET_VISITS[i];
+    const mUnit = B_MEMBER_NET[i] / bm[i];
+    const uUnit = B_UPSELL_NET[i] / bv[i];
+    const evts  = inF2 ? 823529 : (i >= 6 ? 411765 : 0);
+    const rev   = tv * tUnit + m[i] * mUnit + v[i] * uUnit + evts;
+
+    // Costs: fixed by phase + variable scaled to visits
+    let fc;
+    if (i <= 2) fc = FC.ramp[i];
+    else fc = inF2 ? (isY2 ? FC.f2y2 : FC.f2y1) : (isY2 ? FC.f1y2 : FC.f1y1);
+    const vc    = (B_VAR_COSTS[i] / bv[i]) * v[i];
+    const costs = fc + vc;
+    const ebitda = rev - costs;
+
+    // Vicente bonus: 15% of EBITDA > 10M, cap 4.8M/month, from M13
+    let bonus = 0;
+    if (i >= 12 && ebitda > 10e6) bonus = Math.min((ebitda - 10e6) * 0.15, 4.8e6);
+
+    // Tax (F29 = PPM + IVA neto)
+    const gross = rev * 1.19;
+    const ppm   = gross * (isY2 ? 0.015 : 0.0025);
+    const ivaDeb = gross * (0.19/1.19);
+    const ivaCred = costs * 0.25 * 0.19;
+    const netIVA = Math.max(0, ivaDeb - ivaCred);
+    let ivaPay = 0;
+    if (netIVA > ivaCredit) { ivaPay = netIVA - ivaCredit; ivaCredit = 0; }
+    else ivaCredit -= netIVA;
+    const f29 = ppm + ivaPay;
+
+    // Capital flows
+    let cap = i === 0 ? 13996330 : 0;
+    if (i >= 6) cap -= 1000000;
+
+    const flujo = ebitda - bonus - f29 + cap;
+    cum += flujo;
+    return {rev, costs, ebitda, flujo, cum};
+  });
+}
+
+// Pre-compute all 5 scenarios
+const SCENARIOS = ['Muy Lento','Conservador','Base','Acelerado','Exitoso'];
+const SCEN_COLORS = ['#FF6B6B','#FB923C','#F5A623','#34d399','#4ade80'];
+const DATA = SCENARIOS.map((_, i) => computeScenario(i));
+
+// ─── CHARTS SETUP ──────────────────────────────────────────────────────────
+Chart.defaults.color = '#64748b';
+Chart.defaults.font.family = 'Segoe UI, system-ui, sans-serif';
+Chart.defaults.font.size = 11;
+
+const gridLine = {color:'#1e2235', lineWidth:1};
+const noTitle  = {display:false};
+
+function M(v){return (v/1e6).toFixed(1)+'M';}
+
+let barChart, lineChart, stackChart, compareChart;
+
+function initCharts() {
+  if (barChart) barChart.destroy();
+  if (lineChart) lineChart.destroy();
+  if (stackChart) stackChart.destroy();
+
+  const s = currentScen;
+  const d = DATA[s];
+  const flujos = d.map(x => x.flujo/1e6);
+  const cums   = d.map(x => x.cum/1e6);
+  const revs   = d.map(x => x.rev/1e6);
+  const costs  = d.map(x => x.costs/1e6);
+
+  // BAR CHART — Monthly Net Flow
+  barChart = new Chart(document.getElementById('barChart'), {
+    type:'bar',
+    data:{
+      labels: MONTH_LABELS,
+      datasets:[{
+        data: flujos,
+        backgroundColor: flujos.map(v => v >= 0 ? '#22c55e99' : '#ef444499'),
+        borderColor:     flujos.map(v => v >= 0 ? '#22c55e'   : '#ef4444'),
+        borderWidth: 1,
+        borderRadius: 3,
+        label: 'Flujo Neto'
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:true,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>` $${M(c.raw*1e6)}`}}},
+      scales:{
+        x:{grid:gridLine, ticks:{maxRotation:45,font:{size:10}}},
+        y:{grid:gridLine, ticks:{callback:v=>'$'+v.toFixed(0)+'M'}, title:{display:true,text:'Millones CLP'}}
+      }
+    }
+  });
+
+  // LINE CHART — Cumulative Cash
+  const beIdx = cums.findIndex(v => v > 0);
+  lineChart = new Chart(document.getElementById('lineChart'), {
+    type:'line',
+    data:{
+      labels: MONTH_LABELS,
+      datasets:[
+        {
+          data: cums,
+          borderColor: SCEN_COLORS[s],
+          backgroundColor: SCEN_COLORS[s]+'22',
+          fill: true,
+          tension:.35,
+          pointRadius: cums.map((v,i) => i===beIdx ? 6 : 2),
+          pointBackgroundColor: cums.map((v,i) => i===beIdx ? '#fff' : SCEN_COLORS[s]),
+          pointBorderColor: cums.map((v,i) => i===beIdx ? SCEN_COLORS[s] : 'transparent'),
+          pointBorderWidth: 2,
+          label: 'Caja Acumulada'
+        },
+        {
+          data: Array(24).fill(0),
+          borderColor: '#ef4444',
+          borderWidth: 1,
+          borderDash: [5,5],
+          pointRadius: 0,
+          fill: false,
+          label: 'Break-even'
+        }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>` $${M(c.raw*1e6)}`}}
+      },
+      scales:{
+        x:{grid:gridLine, ticks:{maxRotation:45,font:{size:10}}},
+        y:{grid:gridLine, ticks:{callback:v=>'$'+v.toFixed(0)+'M'}, title:{display:true,text:'Millones CLP'}}
+      }
+    }
+  });
+
+  // STACKED BAR — Revenue vs Costs
+  stackChart = new Chart(document.getElementById('stackChart'), {
+    type:'bar',
+    data:{
+      labels: MONTH_LABELS,
+      datasets:[
+        {label:'Ingresos Netos', data:revs,  backgroundColor:'#F5A62388', borderColor:'#F5A623', borderWidth:1, borderRadius:2},
+        {label:'Costos Totales', data:costs, backgroundColor:'#ef444455', borderColor:'#ef4444', borderWidth:1, borderRadius:2}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:true,
+      plugins:{
+        legend:{position:'top', labels:{color:'#94a3b8',boxWidth:12}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: $${M(c.raw*1e6)}`}}
+      },
+      scales:{
+        x:{grid:gridLine, ticks:{maxRotation:45,font:{size:10}}},
+        y:{grid:gridLine, ticks:{callback:v=>'$'+v.toFixed(0)+'M'}, title:{display:true,text:'Millones CLP'}}
+      }
+    }
+  });
+}
+
+// COMPARATOR CHART (persistent)
+function initCompareChart() {
+  if (compareChart) compareChart.destroy();
+  const visible = compVisible;
+  compareChart = new Chart(document.getElementById('compareChart'), {
+    type:'line',
+    data:{
+      labels: MONTH_LABELS,
+      datasets: SCENARIOS.map((name, i) => ({
+        label: name,
+        data: DATA[i].map(x => x.cum/1e6),
+        borderColor: SCEN_COLORS[i],
+        backgroundColor: 'transparent',
+        borderWidth: i === 2 ? 2.5 : 1.5,
+        tension:.35,
+        pointRadius: 0,
+        hidden: !visible[i]
+      })).concat([{
+        data: Array(24).fill(0),
+        borderColor: '#ef4444', borderWidth:1, borderDash:[4,4],
+        pointRadius:0, fill:false, label:'Break-even', hidden:false
+      }])
+    },
+    options:{
+      responsive:true, maintainAspectRatio:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{mode:'index', intersect:false, callbacks:{label:c=>` ${c.dataset.label}: $${typeof c.raw==='number'?M(c.raw*1e6):'0'}`}}
+      },
+      scales:{
+        x:{grid:gridLine, ticks:{maxRotation:45,font:{size:10}}},
+        y:{grid:gridLine, ticks:{callback:v=>'$'+v.toFixed(0)+'M'}}
+      }
+    }
+  });
+}
+
+// ─── TRAFFIC LIGHT ─────────────────────────────────────────────────────────
+function renderTraffic(s) {
+  const tl = document.getElementById('trafficLight');
+  tl.innerHTML = '';
+  DATA[s].forEach((d, i) => {
+    const cum = d.cum;
+    const cls = cum > 5e6 ? 'green' : cum > 0 ? 'yellow' : 'red';
+    const cell = document.createElement('div');
+    cell.className = 'traffic-cell ' + cls;
+    cell.innerHTML = `${MONTH_LABELS[i]}<div class="tval">$${M(cum)}</div>`;
+    tl.appendChild(cell);
+  });
+}
+
+// ─── KPIs ──────────────────────────────────────────────────────────────────
+function renderKPIs(s) {
+  const d = DATA[s];
+  const cums = d.map(x => x.cum);
+  const beIdx = cums.findIndex(v => v > 0);
+  const valley = Math.min(...cums);
+  const negCount = cums.filter(v => v < 0).length;
+  const rev24 = d[23].rev;
+
+  document.getElementById('kpi-be').textContent    = beIdx >= 0 ? MONTH_LABELS[beIdx] : '> M24';
+  document.getElementById('kpi-valley').textContent = '$' + M(valley);
+  document.getElementById('kpi-rev24').textContent  = '$' + M(rev24);
+  document.getElementById('kpi-neg').textContent    = negCount + ' meses';
+
+  // Color KPI-valley: red if large negative
+  const valEl = document.getElementById('kpi-valley');
+  valEl.style.color = valley < -20e6 ? '#ef4444' : valley < 0 ? '#eab308' : '#22c55e';
+  const negEl = document.getElementById('kpi-neg');
+  negEl.style.color = negCount > 12 ? '#ef4444' : negCount > 6 ? '#eab308' : '#22c55e';
+  const beEl = document.getElementById('kpi-be');
+  beEl.style.color = beIdx < 0 ? '#ef4444' : beIdx < 9 ? '#22c55e' : '#eab308';
+}
+
+// ─── STATE & EVENTS ────────────────────────────────────────────────────────
+let currentScen = 2;
+let compVisible = [true,true,true,true,true];
+
+function update(s) {
+  currentScen = s;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===s));
+  renderKPIs(s);
+  initCharts();
+  renderTraffic(s);
+}
+
+// Comparator legend buttons
+function buildCompLegend() {
+  const legend = document.getElementById('compLegend');
+  legend.innerHTML = '';
+  SCENARIOS.forEach((name, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'comp-btn on';
+    btn.textContent = name;
+    btn.style.borderColor = SCEN_COLORS[i];
+    btn.style.color = SCEN_COLORS[i];
+    btn.style.background = 'transparent';
+    btn.addEventListener('click', () => {
+      compVisible[i] = !compVisible[i];
+      btn.classList.toggle('on', compVisible[i]);
+      compareChart.data.datasets[i].hidden = !compVisible[i];
+      compareChart.update();
+    });
+    legend.appendChild(btn);
+  });
+}
+
+document.querySelectorAll('.tab').forEach(t =>
+  t.addEventListener('click', () => update(+t.dataset.s))
+);
+
+// Init
+buildCompLegend();
+initCompareChart();
+update(2);
+</script>
+</body>
+</html>

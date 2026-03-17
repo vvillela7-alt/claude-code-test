@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Float Chile — Meta Ads Report 2025</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0e18;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:14px}
+header{text-align:center;padding:2.5rem 1rem 1.5rem;border-bottom:1px solid #1e2235}
+header h1{font-size:1.9rem;font-weight:300;letter-spacing:6px;color:#F59E0B;text-transform:uppercase}
+header p{color:#64748b;font-size:.78rem;letter-spacing:2px;margin-top:.4rem;text-transform:uppercase}
+.note-pixel{background:#1e1a0e;border:1px solid #F59E0B55;border-radius:8px;padding:1rem 1.3rem;margin:1rem 1.5rem;color:#F59E0B;font-size:.82rem;line-height:1.6}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;padding:1.5rem;max-width:1400px;margin:0 auto}
+.kpi{background:#161722;border:1px solid #1e2235;border-radius:10px;padding:1.2rem 1rem;text-align:center}
+.kpi:hover{border-color:#F59E0B44}
+.kpi-label{font-size:.67rem;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.kpi-value{font-size:1.4rem;font-weight:600;color:#F59E0B}
+.kpi-sub{font-size:.68rem;color:#475569;margin-top:.25rem}
+.kpi-alert{font-size:.7rem;color:#ef4444;margin-top:.3rem;font-weight:600}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;padding:0 1.5rem 1.2rem;max-width:1400px;margin:0 auto}
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:#161722;border:1px solid #1e2235;border-radius:10px;padding:1.2rem}
+.chart-card h2{font-size:.72rem;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem}
+.chart-full{grid-column:1/-1}
+.section-title{font-size:.72rem;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;padding:1.5rem 1.5rem .8rem;max-width:1400px;margin:0 auto}
+/* TABLE */
+.table-wrap{overflow-x:auto;padding:0 1.5rem 1.5rem;max-width:1400px;margin:0 auto}
+.filter-bar{display:flex;gap:.8rem;margin-bottom:.8rem;flex-wrap:wrap}
+.filter-bar input{background:#161722;border:1px solid #2a2b3d;border-radius:6px;color:#e2e8f0;padding:.4rem .8rem;font-size:.8rem;width:280px}
+.filter-bar input:focus{outline:none;border-color:#F59E0B}
+table{width:100%;border-collapse:collapse;font-size:.77rem}
+th{background:#0f1020;color:#94a3b8;padding:.6rem .8rem;text-align:left;position:sticky;top:0;cursor:pointer;white-space:nowrap;letter-spacing:.5px;border-bottom:1px solid #1e2235}
+th:hover{color:#F59E0B}
+td{padding:.55rem .8rem;border-bottom:1px solid #1e2235;white-space:nowrap}
+tr:hover td{background:#1a1b2e}
+td.tdcamp{color:#94a3b8;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+td.tdname{color:#e2e8f0;font-weight:500;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+td.na{color:#374151}
+td.bad{color:#ef4444}
+td.good{color:#22c55e}
+/* SEASONALITY */
+.seas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.8rem;padding:0 1.5rem 1.5rem;max-width:1400px;margin:0 auto}
+.seas-card{background:#161722;border-radius:8px;padding:.9rem 1rem;transition:all .2s}
+.seas-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem}
+.seas-icon{font-size:1rem}
+.seas-name{font-weight:600;font-size:.85rem;flex:1}
+.seas-cls{font-size:.7rem;font-weight:700;letter-spacing:1px}
+.seas-dates{font-size:.68rem;color:#64748b;margin-bottom:.4rem}
+.seas-metrics{display:flex;gap:1rem;font-size:.72rem;color:#94a3b8;margin-bottom:.3rem;flex-wrap:wrap}
+.seas-notes{font-size:.7rem;color:#64748b}
+/* 2026 TABLE */
+.opps-wrap{padding:0 1.5rem 3rem;max-width:1400px;margin:0 auto}
+.opps-wrap table th{background:#0a1a0a}
+footer{text-align:center;padding:2rem;color:#334155;font-size:.7rem;letter-spacing:1px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Float Chile</h1>
+  <p>Meta Ads · Dashboard de Rendimiento 2025 · 17/03/2026 11:10</p>
+</header>
+
+
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="kpi-label">Gasto Total 2025</div>
+    <div class="kpi-value">$21.860</div>
+    <div class="kpi-sub">CLP</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">ROAS General</div>
+    <div class="kpi-value" style="color:#F59E0B">5,84</div>
+    <div class="kpi-alert"></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">CTR Promedio</div>
+    <div class="kpi-value">1,65%</div>
+    <div class="kpi-sub">Tasa de clics</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">CPM Promedio</div>
+    <div class="kpi-value">$3,85</div>
+    <div class="kpi-sub">CLP por 1.000 impresiones</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Costo por Resultado</div>
+    <div class="kpi-value">$16</div>
+    <div class="kpi-sub">CLP por conversión</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Mejor Mes · ROAS</div>
+    <div class="kpi-value" style="color:#22c55e">Dic 25</div>
+    <div class="kpi-sub">ROAS 17,24</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Peor Mes · ROAS</div>
+    <div class="kpi-value" style="color:#ef4444">Abr 25</div>
+    <div class="kpi-sub">ROAS 2,44</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Impresiones Totales</div>
+    <div class="kpi-value">5.678.915</div>
+    <div class="kpi-sub">Alcance acumulado</div>
+  </div>
+</div>
+
+<!-- CHART 1: Gasto semanal + eventos -->
+<div style="max-width:1400px;margin:0 auto;padding:0 1.5rem 1.2rem">
+  <div class="chart-card">
+    <h2>Gasto Semanal con Eventos Estacionales</h2>
+    <canvas id="weeklySpend" height="110"></canvas>
+  </div>
+</div>
+
+<!-- CHART 2+3: CTR/CPM mensual + ROAS mensual -->
+<div class="charts-grid">
+  <div class="chart-card">
+    <h2>CTR y CPM Mensual</h2>
+    <canvas id="ctrCpm" height="220"></canvas>
+  </div>
+  <div class="chart-card">
+    <h2>Evolución ROAS Mensual · Umbral 1,5</h2>
+    <canvas id="roasEvol" height="220"></canvas>
+  </div>
+</div>
+
+<!-- CHART 4: Ranking ad sets por CPR -->
+<div style="max-width:1400px;margin:0 auto;padding:0 1.5rem 1.2rem">
+  <div class="chart-card">
+    <h2>Ranking de Ad Sets por Costo por Resultado (mejor → peor)</h2>
+    <canvas id="rankingCpr" height="80"></canvas>
+  </div>
+</div>
+
+<!-- TABLA AD SETS -->
+<div class="section-title">Tabla Completa de Ad Sets</div>
+<div class="table-wrap">
+  <div class="filter-bar">
+    <input type="text" id="tableSearch" placeholder="🔍 Buscar campaña o ad set..." oninput="filterTable()">
+  </div>
+  <table id="adsetTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Campaña ↕</th>
+        <th onclick="sortTable(1)">Ad Set ↕</th>
+        <th onclick="sortTable(2)">Gasto ↕</th>
+        <th onclick="sortTable(3)">Impresiones ↕</th>
+        <th onclick="sortTable(4)">Clics ↕</th>
+        <th onclick="sortTable(5)">CTR ↕</th>
+        <th onclick="sortTable(6)">CPM ↕</th>
+        <th onclick="sortTable(7)">CPC ↕</th>
+        <th onclick="sortTable(8)">Frecuencia ↕</th>
+        <th onclick="sortTable(9)">ROAS ↕</th>
+        <th onclick="sortTable(10)">Costo/Resultado ↕</th>
+      </tr>
+    </thead>
+    <tbody id="adsetBody">
+      <tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">CYBER OCTUBRE</td>
+            <td>$3.321 CLP</td>
+            <td>605.011</td>
+            <td>12.343</td>
+            <td>2,04%</td>
+            <td>$5,49</td>
+            <td>$0,27</td>
+            <td>2,0</td>
+            <td class="good">3,28</td>
+            <td>$29 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ FRIO (ACTUAL)</td>
+            <td>$2.958 CLP</td>
+            <td>909.247</td>
+            <td>18.782</td>
+            <td>2,07%</td>
+            <td>$3,25</td>
+            <td>$0,16</td>
+            <td>2,1</td>
+            <td class="good">3,55</td>
+            <td>$31 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Black Friday 2025</td>
+            <td>$2.340 CLP</td>
+            <td>416.180</td>
+            <td>8.032</td>
+            <td>1,93%</td>
+            <td>$5,62</td>
+            <td>$0,29</td>
+            <td>1,9</td>
+            <td class="good">6,84</td>
+            <td>$14 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT MARZO 2025</td>
+            <td class="tdname">FLOAT MARZO 2025 - Frontpage</td>
+            <td>$2.178 CLP</td>
+            <td>702.842</td>
+            <td>6.113</td>
+            <td class="bad">0,87%</td>
+            <td>$3,10</td>
+            <td>$0,36</td>
+            <td class="bad">3,6</td>
+            <td class="good">5,08</td>
+            <td>$17 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Navidad 2025</td>
+            <td>$2.046 CLP</td>
+            <td>659.193</td>
+            <td>11.870</td>
+            <td>1,80%</td>
+            <td>$3,10</td>
+            <td>$0,17</td>
+            <td>2,5</td>
+            <td class="good">18,97</td>
+            <td>$6 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT 2025</td>
+            <td class="tdname">FLOAT - 2025 - FRÍO</td>
+            <td>$1.956 CLP</td>
+            <td>710.227</td>
+            <td>12.921</td>
+            <td>1,82%</td>
+            <td>$2,75</td>
+            <td>$0,15</td>
+            <td>2,6</td>
+            <td class="good">5,78</td>
+            <td>$14 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ - Clase Masajes</td>
+            <td>$1.377 CLP</td>
+            <td>420.351</td>
+            <td>4.140</td>
+            <td class="bad">0,98%</td>
+            <td>$3,28</td>
+            <td>$0,33</td>
+            <td>2,4</td>
+            <td class="good">3,05</td>
+            <td>$34 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ - frontpage</td>
+            <td>$1.334 CLP</td>
+            <td>327.120</td>
+            <td>6.544</td>
+            <td>2,00%</td>
+            <td>$4,08</td>
+            <td>$0,20</td>
+            <td>2,7</td>
+            <td class="good">3,50</td>
+            <td>$27 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ - CYBER JUNIO</td>
+            <td>$680 CLP</td>
+            <td>122.355</td>
+            <td>2.322</td>
+            <td>1,90%</td>
+            <td>$5,56</td>
+            <td>$0,29</td>
+            <td>1,6</td>
+            <td class="good">5,17</td>
+            <td>$17 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ - Día del Padre</td>
+            <td>$423 CLP</td>
+            <td>113.879</td>
+            <td>2.246</td>
+            <td>1,97%</td>
+            <td>$3,71</td>
+            <td>$0,19</td>
+            <td>1,7</td>
+            <td class="good">9,87</td>
+            <td>$10 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">RT 20%OFF</td>
+            <td class="tdname">RT 20%OFF</td>
+            <td>$393 CLP</td>
+            <td>73.963</td>
+            <td>683</td>
+            <td class="bad">0,92%</td>
+            <td>$5,32</td>
+            <td>$0,58</td>
+            <td class="bad">11,0</td>
+            <td class="good">4,01</td>
+            <td>$19 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT MARZO 2025</td>
+            <td class="tdname">FLOAT MARZO 2025 - GENERICOS - LP1</td>
+            <td>$373 CLP</td>
+            <td>117.777</td>
+            <td>1.568</td>
+            <td>1,33%</td>
+            <td>$3,17</td>
+            <td>$0,24</td>
+            <td>2,1</td>
+            <td class="good">3,09</td>
+            <td>$23 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ FRIO $77/Día</td>
+            <td>$289 CLP</td>
+            <td>66.241</td>
+            <td>801</td>
+            <td class="bad">1,21%</td>
+            <td>$4,37</td>
+            <td>$0,36</td>
+            <td>1,8</td>
+            <td>1,64</td>
+            <td>$96 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Reset Deportivo</td>
+            <td>$249 CLP</td>
+            <td>58.436</td>
+            <td>770</td>
+            <td>1,32%</td>
+            <td>$4,27</td>
+            <td>$0,32</td>
+            <td>2,2</td>
+            <td class="good">5,49</td>
+            <td>$16 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">RT 30% OFF HALLOWEEN</td>
+            <td class="tdname">RT 30% OFF HALLOWEEN</td>
+            <td>$194 CLP</td>
+            <td>37.174</td>
+            <td>373</td>
+            <td class="bad">1,00%</td>
+            <td>$5,22</td>
+            <td>$0,52</td>
+            <td>2,3</td>
+            <td>1,80</td>
+            <td>$48 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT MARZO 2025</td>
+            <td class="tdname">FLOAT MARZO 2025 - REGALOS - LP2</td>
+            <td>$172 CLP</td>
+            <td>53.655</td>
+            <td>791</td>
+            <td>1,47%</td>
+            <td>$3,21</td>
+            <td>$0,22</td>
+            <td>2,1</td>
+            <td class="good">6,71</td>
+            <td>$11 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT 20% OFF Miércoles a Viernes (20 AGO - 22 AGO)</td>
+            <td>$127 CLP</td>
+            <td>20.798</td>
+            <td>182</td>
+            <td class="bad">0,88%</td>
+            <td>$6,12</td>
+            <td>$0,70</td>
+            <td class="bad">6,0</td>
+            <td class="good">3,58</td>
+            <td>$18 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT 20% OFF Miércoles a Viernes (3 al 5 SEP)</td>
+            <td>$125 CLP</td>
+            <td>20.756</td>
+            <td>208</td>
+            <td class="bad">1,00%</td>
+            <td>$6,04</td>
+            <td>$0,60</td>
+            <td class="bad">5,6</td>
+            <td class="good">4,66</td>
+            <td>$16 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT 20% OFF 24-26 SEPT</td>
+            <td>$117 CLP</td>
+            <td>17.553</td>
+            <td>167</td>
+            <td class="bad">0,95%</td>
+            <td>$6,68</td>
+            <td>$0,70</td>
+            <td class="bad">5,5</td>
+            <td class="good">4,04</td>
+            <td>$17 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT 20% OFF (10 al 12 SEP)</td>
+            <td>$116 CLP</td>
+            <td>22.096</td>
+            <td>256</td>
+            <td class="bad">1,16%</td>
+            <td>$5,23</td>
+            <td>$0,45</td>
+            <td class="bad">4,3</td>
+            <td class="good">3,48</td>
+            <td>$14 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ - Clase Masajes LP RECONECTA</td>
+            <td>$115 CLP</td>
+            <td>24.256</td>
+            <td>212</td>
+            <td class="bad">0,87%</td>
+            <td>$4,73</td>
+            <td>$0,54</td>
+            <td>2,6</td>
+            <td>1,82</td>
+            <td>$38 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT OFF Martes a Viernes (5 AGO - 8 AGO)</td>
+            <td>$112 CLP</td>
+            <td>15.930</td>
+            <td>190</td>
+            <td class="bad">1,19%</td>
+            <td>$7,01</td>
+            <td>$0,59</td>
+            <td class="bad">7,5</td>
+            <td class="good">9,67</td>
+            <td>$10 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT 20% OFF Miércoles a Viernes (27 AGO - 29 AGO)</td>
+            <td>$103 CLP</td>
+            <td>15.957</td>
+            <td>155</td>
+            <td class="bad">0,97%</td>
+            <td>$6,44</td>
+            <td>$0,66</td>
+            <td class="bad">4,9</td>
+            <td class="good">9,81</td>
+            <td>$9 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT TIBIO (30 Días) - LP frontpage</td>
+            <td>$97 CLP</td>
+            <td>13.353</td>
+            <td>184</td>
+            <td>1,38%</td>
+            <td>$7,29</td>
+            <td>$0,53</td>
+            <td class="bad">5,4</td>
+            <td class="good">2,62</td>
+            <td>$32 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Leads Corporativos</td>
+            <td class="tdname">Leads Corporativos</td>
+            <td>$94 CLP</td>
+            <td>8.584</td>
+            <td>189</td>
+            <td>2,20%</td>
+            <td>$10,98</td>
+            <td>$0,50</td>
+            <td>1,3</td>
+            <td>N/A</td>
+            <td>$9 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ - Grand Slam Offer</td>
+            <td>$90 CLP</td>
+            <td>16.073</td>
+            <td>214</td>
+            <td>1,33%</td>
+            <td>$5,63</td>
+            <td>$0,42</td>
+            <td>1,7</td>
+            <td class="good">4,08</td>
+            <td>$45 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT OFF Miércoles a Viernes (13 AGO - 15 AGO)</td>
+            <td>$89 CLP</td>
+            <td>12.065</td>
+            <td>159</td>
+            <td>1,32%</td>
+            <td>$7,41</td>
+            <td>$0,56</td>
+            <td class="bad">7,1</td>
+            <td class="good">5,64</td>
+            <td>$11 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT MARZO 2025</td>
+            <td class="tdname">FLOAT MARZO 2025 - REGALOS - LP1</td>
+            <td>$79 CLP</td>
+            <td>27.329</td>
+            <td>404</td>
+            <td>1,48%</td>
+            <td>$2,90</td>
+            <td>$0,20</td>
+            <td>2,0</td>
+            <td>1,99</td>
+            <td>$40 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Promo 4 Abril 2025 Direct IG</td>
+            <td class="tdname">Promo 4 Abril 2025 Direct IG</td>
+            <td>$69 CLP</td>
+            <td>18.573</td>
+            <td>294</td>
+            <td>1,58%</td>
+            <td>$3,70</td>
+            <td>$0,23</td>
+            <td>1,7</td>
+            <td class="bad">0,69</td>
+            <td>$69 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Advantage+ FRIO RECONECTA</td>
+            <td>$67 CLP</td>
+            <td>19.466</td>
+            <td>130</td>
+            <td class="bad">0,67%</td>
+            <td>$3,45</td>
+            <td>$0,52</td>
+            <td>1,8</td>
+            <td class="bad">1,03</td>
+            <td>$67 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT OFF Martes a Viernes (29 JUL-1 AGO)</td>
+            <td>$53 CLP</td>
+            <td>7.829</td>
+            <td>98</td>
+            <td class="bad">1,25%</td>
+            <td>$6,80</td>
+            <td>$0,54</td>
+            <td>3,3</td>
+            <td class="good">10,70</td>
+            <td>$8 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT MARZO 2025</td>
+            <td class="tdname">FLOAT MARZO 2025 - GENERICOS - LP2</td>
+            <td>$44 CLP</td>
+            <td>12.630</td>
+            <td>154</td>
+            <td class="bad">1,22%</td>
+            <td>$3,45</td>
+            <td>$0,28</td>
+            <td>1,5</td>
+            <td class="bad">0,97</td>
+            <td>$44 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">Retargeting Frontpage OFERTA</td>
+            <td>$24 CLP</td>
+            <td>3.483</td>
+            <td>32</td>
+            <td class="bad">0,92%</td>
+            <td>$6,90</td>
+            <td>$0,75</td>
+            <td class="bad">7,1</td>
+            <td>N/A</td>
+            <td class="na">N/A</td>
+        </tr><tr>
+            <td class="tdcamp">FLOAT 2025</td>
+            <td class="tdname">Retargeting a TIBIO</td>
+            <td>$22 CLP</td>
+            <td>5.071</td>
+            <td>69</td>
+            <td>1,36%</td>
+            <td>$4,34</td>
+            <td>$0,32</td>
+            <td>2,4</td>
+            <td class="good">2,18</td>
+            <td>$22 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT CHECKOUT (7AGO-8 AGO)</td>
+            <td>$16 CLP</td>
+            <td>1.501</td>
+            <td>19</td>
+            <td class="bad">1,27%</td>
+            <td>$10,34</td>
+            <td>$0,82</td>
+            <td class="bad">6,9</td>
+            <td class="good">3,98</td>
+            <td>$16 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT CHECKOUT (31 JUL-1 AGO)</td>
+            <td>$8 CLP</td>
+            <td>812</td>
+            <td>5</td>
+            <td class="bad">0,62%</td>
+            <td>$10,00</td>
+            <td>$1,62</td>
+            <td>3,4</td>
+            <td class="good">5,54</td>
+            <td>$8 CLP</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT CHECKOUT (15 AGO)</td>
+            <td>$5 CLP</td>
+            <td>399</td>
+            <td>4</td>
+            <td class="bad">1,00%</td>
+            <td>$12,41</td>
+            <td>$1,24</td>
+            <td>3,4</td>
+            <td>N/A</td>
+            <td class="na">N/A</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">1% similar compradores</td>
+            <td>$3 CLP</td>
+            <td>669</td>
+            <td>14</td>
+            <td>2,09%</td>
+            <td>$4,25</td>
+            <td>$0,20</td>
+            <td>1,1</td>
+            <td>N/A</td>
+            <td class="na">N/A</td>
+        </tr><tr>
+            <td class="tdcamp">Cascada - Ventas</td>
+            <td class="tdname">RT 30% OFF RECONECTA (11 al 12 SEP)</td>
+            <td>$1 CLP</td>
+            <td>81</td>
+            <td>4</td>
+            <td>4,94%</td>
+            <td>$11,85</td>
+            <td>$0,24</td>
+            <td class="bad">3,9</td>
+            <td>N/A</td>
+            <td class="na">N/A</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ESTACIONALIDAD -->
+<div class="section-title">Análisis de Estacionalidad</div>
+<div class="seas-grid">
+  
+        <div class="seas-card" style="border-left:3px solid #F59E0B">
+          <div class="seas-header">
+            <span class="seas-icon">🟡</span>
+            <span class="seas-name">Vacaciones Verano</span>
+            <span class="seas-cls" style="color:#F59E0B">POTENCIAL</span>
+          </div>
+          <div class="seas-dates">2025-01-01 → 2025-02-28 (59 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $1.589</span>
+            <span>📊 CTR: 1,86%</span>
+            <span>🎯 ROAS: 5,68</span>
+          </div>
+          <div class="seas-notes">Gasto 58% bajo promedio · CTR 18% sobre promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Año Nuevo</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-01-01 → 2025-01-01</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $179</span>
+            <span>📊 CTR: 1,70%</span>
+            <span>🎯 ROAS: 3,12</span>
+          </div>
+          <div class="seas-notes">Gasto 58% bajo promedio · ROAS 46% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #22c55e">
+          <div class="seas-header">
+            <span class="seas-icon">🟢</span>
+            <span class="seas-name">San Valentín</span>
+            <span class="seas-cls" style="color:#22c55e">OPORTUNIDAD</span>
+          </div>
+          <div class="seas-dates">2025-02-14 → 2025-02-14</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $238</span>
+            <span>📊 CTR: 1,82%</span>
+            <span>🎯 ROAS: 10,20</span>
+          </div>
+          <div class="seas-notes">Gasto 43% bajo promedio · CTR 15% sobre promedio · ROAS 76% sobre promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Día de la Mujer</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-03-08 → 2025-03-08</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $189</span>
+            <span>📊 CTR: 1,53%</span>
+            <span>🎯 ROAS: 4,67</span>
+          </div>
+          <div class="seas-notes">Gasto 55% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Inicio Clases Univ.</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-03-10 → 2025-03-14 (5 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $391</span>
+            <span>📊 CTR: 1,67%</span>
+            <span>🎯 ROAS: 3,75</span>
+          </div>
+          <div class="seas-notes">Gasto 53% bajo promedio · ROAS 35% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Día Mundial Salud</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-04-07 → 2025-04-07</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $219</span>
+            <span>📊 CTR: 1,34%</span>
+            <span>🎯 ROAS: 2,45</span>
+          </div>
+          <div class="seas-notes">Gasto 48% bajo promedio · CTR 15% bajo promedio · ROAS 58% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Semana Santa</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-04-13 → 2025-04-20 (8 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $496</span>
+            <span>📊 CTR: 1,08%</span>
+            <span>🎯 ROAS: 2,00</span>
+          </div>
+          <div class="seas-notes">Gasto 41% bajo promedio · CTR 32% bajo promedio · ROAS 65% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #22c55e">
+          <div class="seas-header">
+            <span class="seas-icon">🟢</span>
+            <span class="seas-name">Día del Trabajador</span>
+            <span class="seas-cls" style="color:#22c55e">OPORTUNIDAD</span>
+          </div>
+          <div class="seas-dates">2025-05-01 → 2025-05-01</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $276</span>
+            <span>📊 CTR: 0,72%</span>
+            <span>🎯 ROAS: 8,46</span>
+          </div>
+          <div class="seas-notes">Gasto 34% bajo promedio · CTR 54% bajo promedio · ROAS 46% sobre promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #22c55e">
+          <div class="seas-header">
+            <span class="seas-icon">🟢</span>
+            <span class="seas-name">Día de la Madre</span>
+            <span class="seas-cls" style="color:#22c55e">OPORTUNIDAD</span>
+          </div>
+          <div class="seas-dates">2025-05-11 → 2025-05-11</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $603</span>
+            <span>📊 CTR: 0,74%</span>
+            <span>🎯 ROAS: 10,39</span>
+          </div>
+          <div class="seas-notes">Gasto 44% sobre promedio · CTR 53% bajo promedio · ROAS 79% sobre promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">CyberDay Chile (May)</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-05-26 → 2025-05-28 (3 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $811</span>
+            <span>📊 CTR: 1,33%</span>
+            <span>🎯 ROAS: 3,13</span>
+          </div>
+          <div class="seas-notes">CTR 16% bajo promedio · ROAS 46% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Día del Padre</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-06-23 → 2025-06-23</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $382</span>
+            <span>📊 CTR: 1,48%</span>
+            <span>🎯 ROAS: 3,19</span>
+          </div>
+          <div class="seas-notes">ROAS 45% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Vacaciones Invierno</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-07-14 → 2025-07-27 (14 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $1.378</span>
+            <span>📊 CTR: 1,42%</span>
+            <span>🎯 ROAS: 3,14</span>
+          </div>
+          <div class="seas-notes">CTR 10% bajo promedio · ROAS 46% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Fiestas Patrias</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-09-17 → 2025-09-19 (3 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $242</span>
+            <span>📊 CTR: 1,13%</span>
+            <span>🎯 ROAS: 2,87</span>
+          </div>
+          <div class="seas-notes">Gasto 42% bajo promedio · CTR 29% bajo promedio · ROAS 51% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Día Salud Mental</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-10-10 → 2025-10-10</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $796</span>
+            <span>📊 CTR: 1,30%</span>
+            <span>🎯 ROAS: 4,24</span>
+          </div>
+          <div class="seas-notes">Gasto 89% sobre promedio · CTR 18% bajo promedio · ROAS 27% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">CyberDay Chile (Oct)</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-10-20 → 2025-10-22 (3 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $397</span>
+            <span>📊 CTR: 1,67%</span>
+            <span>🎯 ROAS: 4,23</span>
+          </div>
+          <div class="seas-notes">Gasto 53% bajo promedio · ROAS 27% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Halloween</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-10-31 → 2025-10-31</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $382</span>
+            <span>📊 CTR: 1,43%</span>
+            <span>🎯 ROAS: 2,51</span>
+          </div>
+          <div class="seas-notes">ROAS 57% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #64748b">
+          <div class="seas-header">
+            <span class="seas-icon">⚪</span>
+            <span class="seas-name">Fin Año Corporativo</span>
+            <span class="seas-cls" style="color:#64748b">RUIDO</span>
+          </div>
+          <div class="seas-dates">2025-11-03 → 2025-11-21 (19 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $1.300</span>
+            <span>📊 CTR: 1,93%</span>
+            <span>🎯 ROAS: 3,96</span>
+          </div>
+          <div class="seas-notes">Gasto 23% bajo promedio · CTR 22% sobre promedio · ROAS 32% bajo promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #22c55e">
+          <div class="seas-header">
+            <span class="seas-icon">🟢</span>
+            <span class="seas-name">Black Friday</span>
+            <span class="seas-cls" style="color:#22c55e">OPORTUNIDAD</span>
+          </div>
+          <div class="seas-dates">2025-11-28 → 2025-11-28</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $2.367</span>
+            <span>📊 CTR: 1,94%</span>
+            <span>🎯 ROAS: 6,77</span>
+          </div>
+          <div class="seas-notes">Gasto 463% sobre promedio · CTR 22% sobre promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #22c55e">
+          <div class="seas-header">
+            <span class="seas-icon">🟢</span>
+            <span class="seas-name">Cyber Monday</span>
+            <span class="seas-cls" style="color:#22c55e">OPORTUNIDAD</span>
+          </div>
+          <div class="seas-dates">2025-12-01 → 2025-12-01</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $2.367</span>
+            <span>📊 CTR: 1,94%</span>
+            <span>🎯 ROAS: 6,77</span>
+          </div>
+          <div class="seas-notes">Gasto 463% sobre promedio · CTR 22% sobre promedio</div>
+        </div>
+        <div class="seas-card" style="border-left:3px solid #22c55e">
+          <div class="seas-header">
+            <span class="seas-icon">🟢</span>
+            <span class="seas-name">Navidad</span>
+            <span class="seas-cls" style="color:#22c55e">OPORTUNIDAD</span>
+          </div>
+          <div class="seas-dates">2025-12-24 → 2025-12-25 (2 días)</div>
+          <div class="seas-metrics">
+            <span>💰 Gasto: $201</span>
+            <span>📊 CTR: 1,63%</span>
+            <span>🎯 ROAS: 46,99</span>
+          </div>
+          <div class="seas-notes">Gasto 52% bajo promedio · ROAS 711% sobre promedio</div>
+        </div>
+</div>
+
+<!-- RECOMENDACIONES 2026 -->
+<div class="section-title">Calendario de Oportunidades Recomendadas 2026</div>
+<div class="opps-wrap">
+  <table>
+    <thead>
+      <tr><th>Evento</th><th>Fecha 2026 (ref.)</th><th>Clasificación</th><th>Justificación</th></tr>
+    </thead>
+    <tbody><tr>
+            <td>Vacaciones Verano</td>
+            <td>01-01 al 02-28</td>
+            <td class="good">POTENCIAL</td>
+            <td>ROAS: 5,68 · Gasto 58% bajo promedio · CTR 18% sobre promedio</td>
+        </tr><tr>
+            <td>San Valentín</td>
+            <td>02-14 al 02-14</td>
+            <td class="good">OPORTUNIDAD</td>
+            <td>ROAS: 10,20 · Gasto 43% bajo promedio · CTR 15% sobre promedio · ROAS 76% sobre promedio</td>
+        </tr><tr>
+            <td>Día del Trabajador</td>
+            <td>05-01 al 05-01</td>
+            <td class="good">OPORTUNIDAD</td>
+            <td>ROAS: 8,46 · Gasto 34% bajo promedio · CTR 54% bajo promedio · ROAS 46% sobre promedio</td>
+        </tr><tr>
+            <td>Día de la Madre</td>
+            <td>05-11 al 05-11</td>
+            <td class="good">OPORTUNIDAD</td>
+            <td>ROAS: 10,39 · Gasto 44% sobre promedio · CTR 53% bajo promedio · ROAS 79% sobre promedio</td>
+        </tr><tr>
+            <td>Black Friday</td>
+            <td>11-28 al 11-28</td>
+            <td class="good">OPORTUNIDAD</td>
+            <td>ROAS: 6,77 · Gasto 463% sobre promedio · CTR 22% sobre promedio</td>
+        </tr><tr>
+            <td>Cyber Monday</td>
+            <td>12-01 al 12-01</td>
+            <td class="good">OPORTUNIDAD</td>
+            <td>ROAS: 6,77 · Gasto 463% sobre promedio · CTR 22% sobre promedio</td>
+        </tr><tr>
+            <td>Navidad</td>
+            <td>12-24 al 12-25</td>
+            <td class="good">OPORTUNIDAD</td>
+            <td>ROAS: 46,99 · Gasto 52% bajo promedio · ROAS 711% sobre promedio</td>
+        </tr></tbody>
+  </table>
+</div>
+
+<footer>Float Chile · Meta Ads Performance Report 2025 · Generado con datos de Meta Marketing API · Encoding UTF-8</footer>
+
+<script>
+Chart.defaults.color = '#64748b';
+Chart.defaults.font.family = 'Segoe UI, system-ui, sans-serif';
+Chart.defaults.font.size = 11;
+const grid = {color:'#1e2235',lineWidth:1};
+
+// ── 1. Gasto semanal + eventos ─────────────────────────────────────────
+new Chart(document.getElementById('weeklySpend'), {
+  type: 'line',
+  data: {
+    labels: ["S01 Jan", "S02 Jan", "S03 Jan", "S04 Jan", "S05 Jan", "S06 Feb", "S07 Feb", "S08 Feb", "S09 Feb", "S10 Mar", "S11 Mar", "S12 Mar", "S13 Mar", "S14 Apr", "S15 Apr", "S16 Apr", "S17 Apr", "S18 Apr", "S19 May", "S20 May", "S21 May", "S22 May", "S23 Jun", "S24 Jun", "S25 Jun", "S26 Jun", "S27 Jul", "S28 Jul", "S29 Jul", "S30 Jul", "S31 Jul", "S32 Aug", "S33 Aug", "S34 Aug", "S35 Aug", "S36 Sep", "S37 Sep", "S38 Sep", "S39 Sep", "S40 Oct", "S41 Oct", "S42 Oct", "S43 Oct", "S44 Oct", "S45 Nov", "S46 Nov", "S47 Nov", "S48 Nov", "S49 Dec", "S50 Dec", "S51 Dec", "S52 Dec", "S01 Dec"],
+    datasets: [{
+      label: 'Gasto semanal (CLP)',
+      data: [178.54, 148.8, 139.24, 138.95, 160.6, 296.14, 238.46, 139.68, 148.94, 188.52, 202.53, 210.76, 244.2, 218.66, 325.75, 170.45, 207.27, 276.49, 603.37, 405.02, 238.14, 573.25, 411.17, 441.48, 382.44, 444.51, 538.31, 599.72, 372.21, 406.32, 520.85, 216.13, 332.67, 335.28, 381.55, 427.79, 535.43, 242.32, 253.16, 2601.61, 795.81, 197.69, 199.76, 381.67, 329.67, 282.26, 306.13, 2366.52, 53.27, 637.57, 1212.58, 200.82, 0.0],
+      borderColor: '#F59E0B',
+      backgroundColor: '#F59E0B22',
+      fill: true,
+      tension: 0.35,
+      pointRadius: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {display: false},
+      annotation: {annotations: {'ev0':{"type": "box", "xMin": 0, "xMax": 8, "backgroundColor": "#F59E0B18", "borderColor": "#F59E0B55", "borderWidth": 1, "label": {"content": "Vacaciones Verano", "display": true, "color": "#F59E0B", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev1':{"type": "line", "xMin": 0, "xMax": 0, "borderColor": "#3B82F699", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "A\u00f1o Nuevo", "display": true, "color": "#3B82F6", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev2':{"type": "line", "xMin": 6, "xMax": 6, "borderColor": "#EC489999", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "San Valent\u00edn", "display": true, "color": "#EC4899", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev3':{"type": "line", "xMin": 9, "xMax": 9, "borderColor": "#10B98199", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "D\u00eda de la Mujer", "display": true, "color": "#10B981", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev4':{"type": "line", "xMin": 10, "xMax": 10, "borderColor": "#8B5CF699", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "Inicio Clases Univ.", "display": true, "color": "#8B5CF6", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev5':{"type": "line", "xMin": 14, "xMax": 14, "borderColor": "#EF444499", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "D\u00eda Mundial Salud", "display": true, "color": "#EF4444", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev6':{"type": "box", "xMin": 15, "xMax": 16, "backgroundColor": "#06B6D418", "borderColor": "#06B6D455", "borderWidth": 1, "label": {"content": "Semana Santa", "display": true, "color": "#06B6D4", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev7':{"type": "line", "xMin": 17, "xMax": 17, "borderColor": "#84CC1699", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "D\u00eda del Trabajador", "display": true, "color": "#84CC16", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev8':{"type": "line", "xMin": 19, "xMax": 19, "borderColor": "#F9731699", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "D\u00eda de la Madre", "display": true, "color": "#F97316", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev9':{"type": "line", "xMin": 21, "xMax": 21, "borderColor": "#6366F199", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "CyberDay Chile (May)", "display": true, "color": "#6366F1", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev10':{"type": "line", "xMin": 25, "xMax": 25, "borderColor": "#14B8A699", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "D\u00eda del Padre", "display": true, "color": "#14B8A6", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev11':{"type": "box", "xMin": 28, "xMax": 30, "backgroundColor": "#F43F5E18", "borderColor": "#F43F5E55", "borderWidth": 1, "label": {"content": "Vacaciones Invierno", "display": true, "color": "#F43F5E", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev12':{"type": "line", "xMin": 37, "xMax": 37, "borderColor": "#A78BFA99", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "Fiestas Patrias", "display": true, "color": "#A78BFA", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev13':{"type": "line", "xMin": 40, "xMax": 40, "borderColor": "#FB923C99", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "D\u00eda Salud Mental", "display": true, "color": "#FB923C", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev14':{"type": "line", "xMin": 42, "xMax": 42, "borderColor": "#22D3EE99", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "CyberDay Chile (Oct)", "display": true, "color": "#22D3EE", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev15':{"type": "line", "xMin": 43, "xMax": 43, "borderColor": "#4ADE8099", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "Halloween", "display": true, "color": "#4ADE80", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev16':{"type": "box", "xMin": 44, "xMax": 46, "backgroundColor": "#FACC1518", "borderColor": "#FACC1555", "borderWidth": 1, "label": {"content": "Fin A\u00f1o Corporativo", "display": true, "color": "#FACC15", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev17':{"type": "line", "xMin": 47, "xMax": 47, "borderColor": "#F472B699", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "Black Friday", "display": true, "color": "#F472B6", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev18':{"type": "line", "xMin": 48, "xMax": 48, "borderColor": "#60A5FA99", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "Cyber Monday", "display": true, "color": "#60A5FA", "font": {"size": 9}, "position": "start", "rotation": 90}},'ev19':{"type": "line", "xMin": 51, "xMax": 51, "borderColor": "#34D39999", "borderWidth": 1.5, "borderDash": [4, 4], "label": {"content": "Navidad", "display": true, "color": "#34D399", "font": {"size": 9}, "position": "start", "rotation": 90}}}},
+      tooltip: {callbacks: {label: c => ' $' + Number(c.raw).toLocaleString('es-CL')}}
+    },
+    scales: {
+      x: {grid, ticks: {maxRotation: 45, font: {size: 9}}},
+      y: {grid, ticks: {callback: v => '$' + (v/1000).toFixed(0) + 'k'},
+           title: {display: true, text: 'CLP'}}
+    }
+  }
+});
+
+// ── 2. CTR y CPM mensual ─────────────────────────────────────────────
+new Chart(document.getElementById('ctrCpm'), {
+  type: 'line',
+  data: {
+    labels: ["Ene 25", "Feb 25", "Mar 25", "Abr 25", "May 25", "Jun 25", "Jul 25", "Ago 25", "Sep 25", "Oct 25", "Nov 25", "Dic 25"],
+    datasets: [
+      {label:'CTR (%)', data:[1.863, 1.829, 1.556, 1.129, 0.914, 1.687, 1.39, 1.72, 1.646, 1.955, 2.031, 1.765], borderColor:'#3B82F6', yAxisID:'y',
+        tension:.35, pointRadius:3, fill:false},
+      {label:'CPM (CLP)', data:[2.65, 2.65, 3.2, 3.2, 3.23, 4.12, 3.83, 4.16, 3.92, 5.3, 4.4, 3.41], borderColor:'#EC4899', yAxisID:'y2',
+        tension:.35, pointRadius:3, fill:false, borderDash:[5,3]}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position:'top', labels: {color:'#94a3b8', boxWidth:12}}},
+    scales: {
+      x: {grid},
+      y:  {grid, position:'left',  title:{display:true,text:'CTR %'}},
+      y2: {grid: {display:false}, position:'right', title:{display:true,text:'CPM CLP'}}
+    }
+  }
+});
+
+// ── 3. ROAS mensual + umbral ───────────────────────────────────────────
+const avgRoas = 5.797;
+const roasData = [4.247, 8.184, 3.902, 2.439, 5.765, 5.601, 2.976, 4.051, 3.154, 3.334, 5.164, 17.242];
+new Chart(document.getElementById('roasEvol'), {
+  type: 'line',
+  data: {
+    labels: ["Ene 25", "Feb 25", "Mar 25", "Abr 25", "May 25", "Jun 25", "Jul 25", "Ago 25", "Sep 25", "Oct 25", "Nov 25", "Dic 25"],
+    datasets: [
+      {
+        label: 'ROAS Mensual',
+        data: roasData,
+        borderColor: '#10B981',
+        backgroundColor: ctx => {
+          const g = ctx.chart.ctx.createLinearGradient(0,0,0,200);
+          g.addColorStop(0,'#10B98133'); g.addColorStop(1,'#10B98100');
+          return g;
+        },
+        fill: true, tension: .35, pointRadius: 4,
+        pointBackgroundColor: roasData.map(v => v !== null && v < 1.5 ? '#ef4444' : '#10B981'),
+      },
+      {
+        label: 'Umbral mínimo (1,5)',
+        data: Array(12).fill(1.5),
+        borderColor: '#ef444477',
+        borderWidth: 1.5,
+        borderDash: [6,4],
+        pointRadius: 0,
+        fill: false,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {position:'top', labels:{color:'#94a3b8',boxWidth:12}},
+      tooltip: {callbacks: {label: c => ' ROAS: ' + (c.raw ? c.raw.toFixed(2).replace('.',',') : 'N/A')}}
+    },
+    scales: {
+      x: {grid},
+      y: {grid, min: 0, title: {display:true,text:'ROAS'}}
+    }
+  }
+});
+
+// ── 4. Ranking CPR ────────────────────────────────────────────────────
+new Chart(document.getElementById('rankingCpr'), {
+  type: 'bar',
+  data: {
+    labels: ["Cascada - Ventas\u2026/Navidad 2025", "Cascada - Ventas\u2026/RT OFF Martes a Vierne", "Cascada - Ventas\u2026/RT CHECKOUT (31 JUL-1 ", "Cascada - Ventas\u2026/RT 20% OFF Mi\u00e9rcoles a", "Leads Corporativos\u2026/Leads Corporativos", "Cascada - Ventas\u2026/Advantage+ - D\u00eda del P", "Cascada - Ventas\u2026/RT OFF Martes a Vierne", "Cascada - Ventas\u2026/RT OFF Mi\u00e9rcoles a Vie", "FLOAT MARZO 2025\u2026/FLOAT MARZO 2025 - REG", "FLOAT 2025\u2026/FLOAT - 2025 - FR\u00cdO", "Cascada - Ventas\u2026/Black Friday 2025", "Cascada - Ventas\u2026/RT 20% OFF (10 al 12 S", "Cascada - Ventas\u2026/RT CHECKOUT (7AGO-8 AG", "Cascada - Ventas\u2026/Reset Deportivo", "Cascada - Ventas\u2026/RT 20% OFF Mi\u00e9rcoles a"],
+    datasets: [{
+      label: 'Costo por Resultado (CLP)',
+      data: [5.7, 7.61, 8.12, 8.56, 8.57, 9.6, 10.15, 11.17, 11.47, 13.87, 13.93, 14.45, 15.52, 15.59, 15.68],
+      backgroundColor: [5.7, 7.61, 8.12, 8.56, 8.57, 9.6, 10.15, 11.17, 11.47, 13.87, 13.93, 14.45, 15.52, 15.59, 15.68].map((v,i) => i < 3 ? '#22c55e99' : i >= 15 - 3 ? '#ef444499' : '#F59E0B66'),
+      borderColor:     [5.7, 7.61, 8.12, 8.56, 8.57, 9.6, 10.15, 11.17, 11.47, 13.87, 13.93, 14.45, 15.52, 15.59, 15.68].map((v,i) => i < 3 ? '#22c55e'   : i >= 15 - 3 ? '#ef4444'   : '#F59E0B'),
+      borderWidth: 1,
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: {display:false},
+      tooltip: {callbacks: {label: c => ' $' + Number(c.raw).toLocaleString('es-CL')}}
+    },
+    scales: {
+      x: {grid, title:{display:true,text:'CLP'}},
+      y: {grid:{display:false}, ticks:{font:{size:10}}}
+    }
+  }
+});
+
+// ── Tabla interactiva ─────────────────────────────────────────────────
+let sortDir = 1;
+function sortTable(col) {
+  const tbody = document.getElementById('adsetBody');
+  const rows = Array.from(tbody.rows);
+  rows.sort((a, b) => {
+    const av = a.cells[col].textContent.replace(/[$.%\s\.,]/g,'').replace(',','.');
+    const bv = b.cells[col].textContent.replace(/[$.%\s\.,]/g,'').replace(',','.');
+    const an = parseFloat(av) || av;
+    const bn = parseFloat(bv) || bv;
+    return (an < bn ? -1 : an > bn ? 1 : 0) * sortDir;
+  });
+  sortDir *= -1;
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+function filterTable() {
+  const q = document.getElementById('tableSearch').value.toLowerCase();
+  document.querySelectorAll('#adsetBody tr').forEach(r => {
+    const txt = r.textContent.toLowerCase();
+    r.style.display = txt.includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
