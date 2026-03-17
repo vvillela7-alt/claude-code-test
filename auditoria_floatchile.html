@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoría CRO — Float Chile</title>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:    #0db6c7;
+    --peach:   #f2bba0;
+    --purple:  #472172;
+    --teal2:   #19a1b3;
+    --bg:      #0d0d14;
+    --bg2:     #13131f;
+    --bg3:     #1a1a2e;
+    --surface: #1e1e30;
+    --border:  #2a2a42;
+    --text:    #e8e8f0;
+    --muted:   #8888aa;
+    --red:     #e74c4c;
+    --yellow:  #f0b429;
+    --green:   #2ecc71;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { color: var(--peach); }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--purple) 0%, #2a0e4a 50%, #0a2a3a 100%);
+    padding: 60px 40px 48px;
+    text-align: center;
+    border-bottom: 2px solid var(--teal);
+  }
+  .site-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--peach);
+    margin-bottom: 14px;
+  }
+  .site-header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .site-header h1 span { color: var(--teal); }
+  .site-header .meta {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── LAYOUT ── */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+
+  h2.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3.subsection { font-size: 16px; font-weight: 600; color: var(--peach); margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── INDEX ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin: 36px 0;
+  }
+  .toc h2 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+  .toc ol { padding-left: 22px; }
+  .toc li { margin-bottom: 8px; font-size: 14px; }
+  .toc a { color: var(--text); }
+  .toc a:hover { color: var(--teal); }
+
+  /* ── SCORE BADGE ── */
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .score-badge .num { font-size: 24px; }
+  .score-badge.red  { border-color: var(--red);    color: var(--red); }
+  .score-badge.yellow { border-color: var(--yellow); color: var(--yellow); }
+  .score-badge.green  { border-color: var(--green);  color: var(--green); }
+
+  /* ── SEMÁFORO ── */
+  .semaforo {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .semaforo.red    { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .semaforo.yellow { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+  .semaforo.green  { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+  /* ── PAGE AUDIT CARD ── */
+  .page-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .page-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    cursor: pointer;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .page-card-header:hover { background: #22223a; }
+  .page-card-header .page-title { font-size: 16px; font-weight: 700; }
+  .page-card-header .header-right { display: flex; align-items: center; gap: 14px; }
+  .page-card-header .score-mini {
+    font-size: 13px; font-weight: 700; padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .score-mini.red    { background: rgba(231,76,76,.15);  color: var(--red);    border: 1px solid var(--red); }
+  .score-mini.yellow { background: rgba(240,180,41,.15); color: var(--yellow); border: 1px solid var(--yellow); }
+  .score-mini.green  { background: rgba(46,204,113,.15); color: var(--green);  border: 1px solid var(--green); }
+  .chevron { font-size: 12px; color: var(--muted); transition: transform 0.3s; }
+  .page-card-body { padding: 24px; display: none; }
+  .page-card.open .page-card-body { display: block; }
+  .page-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── PROBLEM BLOCKS ── */
+  .problem-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .problem-block.medium { border-left-color: var(--yellow); }
+  .problem-block.low    { border-left-color: var(--muted); }
+  .problem-block .pb-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .problem-block .pb-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .problem-block p { font-size: 13px; color: var(--muted); }
+
+  /* ── RECOMMENDATION BLOCK ── */
+  .rec-block {
+    background: rgba(13,182,199,.06);
+    border: 1px solid rgba(13,182,199,.25);
+    border-left: 4px solid var(--teal);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .rec-block .rb-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal2);
+    margin-bottom: 6px;
+  }
+  .rec-block .rb-title { font-size: 14px; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+  .rec-block p, .rec-block ul { font-size: 13px; color: var(--muted); }
+  .rec-block ul { padding-left: 18px; }
+  .rec-block ul li { margin-bottom: 4px; }
+
+  /* ── COPY EXAMPLE ── */
+  .copy-example {
+    background: #0a0a15;
+    border: 1px dashed var(--purple);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0;
+  }
+  .copy-example .ce-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .copy-example .ce-before { color: var(--red); font-size: 13px; margin-bottom: 6px; }
+  .copy-example .ce-after  { color: var(--green); font-size: 14px; font-weight: 600; }
+  .copy-example small { display: block; color: var(--muted); font-size: 11px; margin-top: 8px; }
+
+  /* ── EXEC SUMMARY ── */
+  .exec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .kpi-card .kpi-num { font-size: 36px; font-weight: 700; margin-bottom: 6px; }
+  .kpi-card .kpi-label { font-size: 11px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+  .kpi-card.bad  .kpi-num { color: var(--red); }
+  .kpi-card.warn .kpi-num { color: var(--yellow); }
+  .kpi-card.ok   .kpi-num { color: var(--green); }
+
+  /* ── OPPORTUNITY LIST ── */
+  .opp-list { counter-reset: opp; }
+  .opp-item {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+  }
+  .opp-num {
+    counter-increment: opp;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--teal);
+    min-width: 36px;
+    line-height: 1;
+  }
+  .opp-content .opp-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .opp-content p { font-size: 13px; color: var(--muted); }
+  .impact-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .impact-tag.alto   { background: rgba(231,76,76,.15);  color: var(--red); }
+  .impact-tag.medio  { background: rgba(240,180,41,.15); color: var(--yellow); }
+  .impact-tag.bajo   { background: rgba(46,204,113,.15); color: var(--green); }
+  .effort-tag.alto   { background: rgba(231,76,76,.08);  color: var(--muted); border: 1px solid #333; }
+  .effort-tag.medio  { background: rgba(240,180,41,.08); color: var(--muted); border: 1px solid #333; }
+  .effort-tag.bajo   { background: rgba(46,204,113,.08); color: var(--muted); border: 1px solid #333; }
+
+  /* ── ACTION PLAN TABLE ── */
+  .action-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .action-table th {
+    background: var(--bg3);
+    color: var(--teal);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .action-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .action-table tr:last-child td { border-bottom: none; }
+  .action-table tr:hover td { background: var(--bg3); }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .tag.quick  { background: rgba(46,204,113,.15);  color: var(--green); }
+  .tag.medio  { background: rgba(240,180,41,.15); color: var(--yellow); }
+  .tag.grande { background: rgba(231,76,76,.15);  color: var(--red); }
+  .tag.alto   { background: rgba(231,76,76,.15);  color: var(--red); }
+  .tag.low    { background: rgba(46,204,113,.15);  color: var(--green); }
+
+  /* ── ALERT BANNER ── */
+  .alert {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: rgba(231,76,76,.08);
+    border: 1px solid rgba(231,76,76,.35);
+    border-left: 4px solid var(--red);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .alert .alert-icon { font-size: 22px; flex-shrink: 0; }
+  .alert .alert-title { font-size: 14px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+  .alert p { font-size: 13px; color: var(--muted); }
+
+  /* ── FINDINGS GRID ── */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  @media (max-width: 640px) { .findings-grid { grid-template-columns: 1fr; } }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    text-align: center;
+    padding: 36px 24px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── QUICK WINS BOX ── */
+  .qw-box {
+    background: rgba(71,33,114,.15);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+  .qw-box h3 { color: var(--peach); margin-bottom: 16px; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+  .qw-box ol { padding-left: 20px; }
+  .qw-box li { font-size: 13px; margin-bottom: 10px; color: var(--text); }
+  .qw-box li strong { color: var(--peach); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="eyebrow">Informe de Auditoría CRO · Marzo 2026</div>
+  <h1>Float Chile<br><span>Auditoría de Conversión</span></h1>
+  <p class="meta">floatchile.cl &nbsp;·&nbsp; 9 páginas analizadas &nbsp;·&nbsp; Frameworks: NNG · CXL · Copyhackers · Unbounce</p>
+</header>
+
+<div class="wrapper">
+
+  <!-- ── TABLA DE CONTENIDOS ── -->
+  <nav class="toc">
+    <h2>Índice de Contenidos</h2>
+    <ol>
+      <li><a href="#ejecutivo">Resumen Ejecutivo</a></li>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#flotacion">Página: Flotación</a></li>
+      <li><a href="#fire-ice">Página: Fire & Ice</a></li>
+      <li><a href="#sauna">Página: Sauna</a></li>
+      <li><a href="#servicios">Página: Servicios / Programas</a></li>
+      <li><a href="#faq">Página: FAQ</a></li>
+      <li><a href="#testimonios">Página: Testimonios</a></li>
+      <li><a href="#antes">Página: Antes de Flotar</a></li>
+      <li><a href="#membresias">Página: Membresías</a></li>
+      <li><a href="#booking">Flujo de Reserva (AgendaPro)</a></li>
+      <li><a href="#plan">Plan de Acción Priorizado</a></li>
+    </ol>
+  </nav>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 1: RESUMEN EJECUTIVO
+  ════════════════════════════════════ -->
+  <section class="section" id="ejecutivo">
+    <h2 class="section-title">01 · Resumen Ejecutivo</h2>
+
+    <div class="exec-grid">
+      <div class="kpi-card bad">
+        <div class="kpi-num">3.8</div>
+        <div class="kpi-label">Score general del sitio / 10</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-num">9</div>
+        <div class="kpi-label">Páginas analizadas</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-num">6</div>
+        <div class="kpi-label">Páginas en rojo</div>
+      </div>
+      <div class="kpi-card warn">
+        <div class="kpi-num">2</div>
+        <div class="kpi-label">Páginas en amarillo</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-num">1</div>
+        <div class="kpi-label">Páginas rota (FAQ)</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-num">5</div>
+        <div class="kpi-label">Pasos para reservar</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <div class="alert-icon">🚨</div>
+      <div>
+        <div class="alert-title">Diagnóstico Central</div>
+        <p>Float Chile tiene un producto transformador y copy emocional notable en el home, pero el sitio <strong>no está construido para convertir</strong>. Las páginas de servicio son cáscaras vacías con H1s que son solo nombres de categoría. El FAQ está roto. Los testimonios están escondidos. El flujo de booking tiene 5 pasos con fricción innecesaria. La principal objeción del usuario — "¿realmente me va a servir?" — <strong>nunca se responde directamente</strong> antes de llegar al botón de reserva.</p>
+      </div>
+    </div>
+
+    <h3 class="subsection">Top 5 Oportunidades de Mayor Impacto</h3>
+    <div class="opp-list">
+      <div class="opp-item">
+        <div class="opp-num">1</div>
+        <div class="opp-content">
+          <div class="opp-title">Reescribir los H1 de todas las páginas de servicio</div>
+          <span class="impact-tag alto">Impacto: Alto</span><span class="impact-tag bajo tag effort-tag">Esfuerzo: Bajo</span>
+          <p>"Flotación", "Sauna", "Fire & Ice" son los peores H1 posibles. No hay beneficio, no hay promesa, no hay razón para seguir leyendo. Un H1 orientado al resultado del cliente puede duplicar el tiempo en página y el scroll rate.</p>
+        </div>
+      </div>
+      <div class="opp-item">
+        <div class="opp-num">2</div>
+        <div class="opp-content">
+          <div class="opp-title">Reparar y poblar la página de FAQ</div>
+          <span class="impact-tag alto">Impacto: Alto</span><span class="impact-tag bajo tag effort-tag">Esfuerzo: Bajo</span>
+          <p>La página FAQ está mostrando "Your FAQ content here" en producción. Esta es la página más crítica para resolver la objeción #1 ("¿me va a servir?") y está completamente rota. Fix inmediato obligatorio.</p>
+        </div>
+      </div>
+      <div class="opp-item">
+        <div class="opp-num">3</div>
+        <div class="opp-content">
+          <div class="opp-title">Llevar "30.000 personas" y testimonios reales al home y páginas de servicio</div>
+          <span class="impact-tag alto">Impacto: Alto</span><span class="impact-tag medio tag effort-tag">Esfuerzo: Medio</span>
+          <p>El stat más poderoso del sitio ("Más de 30.000 personas ya lo probaron") está enterrado en la página de testimonios. Los testimonios son solo videos sin transcripción. Esta prueba social necesita estar en cada página de servicio y above the fold en el home.</p>
+        </div>
+      </div>
+      <div class="opp-item">
+        <div class="opp-num">4</div>
+        <div class="opp-content">
+          <div class="opp-title">Cambiar el CTA principal del home de "Gift Cards" a reserva propia</div>
+          <span class="impact-tag alto">Impacto: Alto</span><span class="impact-tag bajo tag effort-tag">Esfuerzo: Bajo</span>
+          <p>El primer CTA visible en el home es "Ver Gift Cards". Esto empuja a todos los visitantes que llegaron a comprar para sí mismos hacia un flujo de regalo, creando abandono. El CTA primario debe ser "Reservar mi sesión" y el de gift cards debe ser secundario.</p>
+        </div>
+      </div>
+      <div class="opp-item">
+        <div class="opp-num">5</div>
+        <div class="opp-content">
+          <div class="opp-title">Agregar un reductor de riesgo para primera vez</div>
+          <span class="impact-tag alto">Impacto: Alto</span><span class="impact-tag medio tag effort-tag">Esfuerzo: Medio</span>
+          <p>No hay ninguna garantía, política de primera vez, ni framing de "si no te convence te devolvemos el dinero". La objeción central del cliente es el riesgo percibido. Una frase simple como "Si tu primera sesión no cumple tus expectativas, te regalamos la siguiente" puede incrementar significativamente la conversión de nuevos clientes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qw-box">
+      <h3>⚡ Quick Wins: Implementables Hoy Sin Tocar el Diseño</h3>
+      <ol>
+        <li><strong>Cambiar el botón principal del hero</strong> de "Ver Gift Cards" a "Quiero reservar mi sesión →"</li>
+        <li><strong>Cambiar el H1 de Flotación</strong> de "Flotación" a algo como "Apaga el ruido. 60 minutos de silencio que cambian tu semana."</li>
+        <li><strong>Agregar "Más de 30.000 personas ya lo probaron"</strong> debajo del H1 del home como social proof inline</li>
+        <li><strong>Reparar la página FAQ</strong> — añadir al menos 10 preguntas reales (hay contenido en "Antes de Flotar" que puede adaptarse)</li>
+        <li><strong>Cambiar el texto del CTA de reserva</strong> de "Reserva directamente tu sesión [aquí]" a un botón real: "Reservar mi sesión ahora →"</li>
+        <li><strong>Agregar 3 testimonios de texto</strong> (extraídos de Google Maps o Instagram) a la página de Flotación, con nombre y resultado específico</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 2: HOME
+  ════════════════════════════════════ -->
+  <section class="section" id="home">
+    <h2 class="section-title">02 · Home</h2>
+
+    <div class="score-badge yellow">
+      <span class="semaforo yellow"></span>
+      <span class="num">6</span>
+      <span>/ 10 &nbsp;—&nbsp; AMARILLO</span>
+    </div>
+
+    <div class="page-card open" id="card-home">
+      <div class="page-card-header" onclick="toggle('card-home')">
+        <span class="page-title">🏠 floatchile.cl/</span>
+        <div class="header-right">
+          <span class="score-mini yellow">6/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <h3 class="subsection">Inventario de Elementos</h3>
+        <div class="findings-grid">
+          <div class="rec-block">
+            <div class="rb-label">H1 Actual</div>
+            <div class="rb-title">"Reduce el estrés, mejora tu sueño y alivia dolores... en solo una sesión"</div>
+            <p>✓ Correcto: beneficio-orientado, específico, habla al problema del cliente.</p>
+          </div>
+          <div class="rec-block">
+            <div class="rb-label">CTAs Principales</div>
+            <div class="rb-title">"Ver Gift Cards" (primario) · "Vivir algo único" (secundario)</div>
+            <p>✗ El primario empuja gift cards. El secundario es vago — ¿qué es "algo único"?</p>
+          </div>
+          <div class="rec-block">
+            <div class="rb-label">Prueba Social</div>
+            <div class="rb-title">Logos de LUN, El Mercurio, La Tercera</div>
+            <p>Parcial: menciones de prensa pero sin citas. Sin stat de clientes. Sin testimonios de texto.</p>
+          </div>
+          <div class="rec-block">
+            <div class="rb-label">Copy Emocional</div>
+            <div class="rb-title">"Tu cuerpo está en piloto automático. Tu mente también."</div>
+            <p>✓ Excelente — habla exactamente al estado del cliente ideal.</p>
+          </div>
+        </div>
+
+        <h3 class="subsection">Problemas Críticos</h3>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: ALTO</div>
+          <div class="pb-title">El CTA principal empuja gift cards, no auto-reserva</div>
+          <p>El primer botón visible es "Ver Gift Cards". Esto asume que el visitante quiere regalar, no vivir la experiencia. La mayoría de los visitantes del home llegan por sí mismos (desde ads, búsqueda orgánica, redes). Enviarlos al flujo de gift card crea fricción y abandono inmediato.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">"Vivir algo único" es el CTA más vago posible</div>
+          <p>Un CTA debe decir exactamente qué pasa después del click. "Vivir algo único" no promete nada, no genera urgencia, y no reduce la fricción. El principio CXL de "los CTAs deben continuar la promesa del headline" no se cumple aquí.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #3 — Impacto: MEDIO</div>
+          <div class="pb-title">Stat de 30.000 clientes no aparece en home</div>
+          <p>El número más poderoso de social proof del sitio ("Más de 30.000 personas ya lo probaron") está en la página de testimonios, invisible para quienes no navegan allá. Este número debe estar above the fold en el home.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #4 — Impacto: MEDIO</div>
+          <div class="pb-title">Sin testimonios de texto en el home — solo logos de prensa</div>
+          <p>Los logos de LUN, El Mercurio y La Tercera dan credibilidad de medios, pero no resuelven la objeción del cliente: "¿A personas como yo les funcionó?". Necesitan agregarse 2-3 testimonios de texto con nombres reales y resultados específicos.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #5 — Impacto: MEDIO</div>
+          <div class="pb-title">Mezcla de mensajes: servicio propio vs. regalo en el mismo hero</div>
+          <p>El H2 del hero dice "Regala una experiencia inolvidable" pero el H1 habla a quien quiere reducir su propio estrés. Esta ambigüedad debilita ambos mensajes. El home debe elegir a quién habla primero.</p>
+        </div>
+
+        <h3 class="subsection">Recomendaciones y Copy Mejorado</h3>
+
+        <div class="copy-example">
+          <div class="ce-label">H1 — Sin cambio necesario</div>
+          <div class="ce-after">✓ "Reduce el estrés, mejora tu sueño y alivia dolores... en solo una sesión" — Mantener.</div>
+          <small>Es uno de los mejores elementos del sitio. Beneficio claro, específico y relevante.</small>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">CTA Principal — Cambiar</div>
+          <div class="ce-before">✗ Antes: "Ver Gift Cards"</div>
+          <div class="ce-after">✓ Después: "Reservar mi primera sesión →"</div>
+          <small>CTA secundario: "Regalar una experiencia" (menor jerarquía visual)</small>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">CTA Secundario — Cambiar</div>
+          <div class="ce-before">✗ Antes: "Vivir algo único"</div>
+          <div class="ce-after">✓ Después: "Ver cómo funciona la flotación →"</div>
+          <small>Lleva a la página de flotación bien trabajada, reduce fricción de primera vez</small>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">Sub-headline a agregar bajo el H1</div>
+          <div class="ce-after">✓ Agregar: "Más de 30.000 personas en Chile ya lo probaron."</div>
+          <small>Social proof numérico como primera línea debajo del H1</small>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Recomendación adicional</div>
+          <div class="rb-title">Agregar 2 testimonios de texto con resultado específico</div>
+          <p>Ejemplo de testimonio ideal: <em>"Llegué con cefalea tensional de 3 días. Salí durmiendo en el auto. Volví al día siguiente." — Catalina R., Diseñadora, 34 años</em></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 3: FLOTACIÓN
+  ════════════════════════════════════ -->
+  <section class="section" id="flotacion">
+    <h2 class="section-title">03 · Página: Flotación</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">3</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-flotacion">
+      <div class="page-card-header" onclick="toggle('card-flotacion')">
+        <span class="page-title">🌊 /pages/flotacion</span>
+        <div class="header-right">
+          <span class="score-mini red">3/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <h3 class="subsection">Inventario</h3>
+        <div class="findings-grid">
+          <div class="problem-block" style="margin:0">
+            <div class="pb-label">H1 Actual</div>
+            <div class="pb-title">"Flotación"</div>
+            <p>Solo el nombre del servicio. Sin beneficio, sin promesa, sin razón para seguir leyendo.</p>
+          </div>
+          <div class="problem-block" style="margin:0">
+            <div class="pb-label">H2 Actual</div>
+            <div class="pb-title">"¡Sumérgete en una experiencia fuera de este mundo con la terapia de aislamiento sensorial!"</div>
+            <p>"Aislamiento sensorial" es jerga técnica. "Fuera de este mundo" es promesa genérica.</p>
+          </div>
+          <div class="problem-block" style="margin:0">
+            <div class="pb-label">CTAs</div>
+            <div class="pb-title">"Reserva directamente tu sesión [aquí]"</div>
+            <p>El link de conversión es la palabra "aquí" — UX terrible. Parece un link de blog, no un botón de acción.</p>
+          </div>
+          <div class="problem-block" style="margin:0">
+            <div class="pb-label">Testimonios</div>
+            <div class="pb-title">Ninguno</div>
+            <p>Zero prueba social en la página del servicio principal.</p>
+          </div>
+        </div>
+
+        <h3 class="subsection">Problemas Críticos</h3>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: CRÍTICO</div>
+          <div class="pb-title">H1 "Flotación" — el peor H1 posible</div>
+          <p>Según Nielsen Norman Group, el visitante decide si se queda en los primeros 5 segundos. Un H1 que es solo el nombre del servicio no le da al visitante ninguna razón para continuar. No hay beneficio, no hay promesa, no hay conexión con su problema.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">La página es una tienda, no una página de conversión</div>
+          <p>La estructura actual es: título → descripción técnica de 2 líneas → grid de gift cards. No hay narrativa de transformación, no hay manejo de objeciones, no hay respuesta a "¿me va a servir a mí?". Una persona indecisa no encuentra razones para reservar.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #3 — Impacto: ALTO</div>
+          <div class="pb-title">Cero testimonios y cero prueba social</div>
+          <p>La página más importante del servicio principal no tiene un solo testimonio. El cliente llega buscando validación social antes de comprometerse con una experiencia desconocida y no encuentra nada.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #4 — Impacto: MEDIO</div>
+          <div class="pb-title">Jerga técnica aleja al cliente no iniciado</div>
+          <p>"Terapia de aislamiento sensorial" es cómo lo describe la industria, no cómo lo busca o entiende un profesional urbano de 35 años estresado. El lenguaje del cliente es: silencio, desconexión, dormir bien, quitar la tensión del cuello.</p>
+        </div>
+
+        <h3 class="subsection">Recomendaciones y Copy Mejorado</h3>
+
+        <div class="copy-example">
+          <div class="ce-label">H1 — Reemplazar Completamente</div>
+          <div class="ce-before">✗ Antes: "Flotación"</div>
+          <div class="ce-after">✓ Opción A: "Apaga el ruido. 60 minutos de silencio total que resetean tu sistema nervioso."</div>
+          <div class="ce-after">✓ Opción B: "Tu mente no sabe lo que es el silencio real. Esto cambia eso."</div>
+          <small>Test A/B recomendado entre versión de beneficio (A) vs. provocación (B)</small>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">H2 — Reemplazar</div>
+          <div class="ce-before">✗ Antes: "¡Sumérgete en una experiencia fuera de este mundo con la terapia de aislamiento sensorial!"</div>
+          <div class="ce-after">✓ Después: "Flotás en agua con sal a temperatura corporal. Sin luz. Sin sonido. Tu sistema nervioso finalmente descansa — equivalente a 4 horas de sueño profundo."</div>
+          <small>Específico, científico, habla al mecanismo. No promesas vacías.</small>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">CTA — Cambiar urgente</div>
+          <div class="ce-before">✗ Antes: "Reserva directamente tu sesión [aquí]" (link en texto)</div>
+          <div class="ce-after">✓ Después: Botón real con texto → "Reservar mi sesión de flotación →"</div>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Sección Nueva a Agregar</div>
+          <div class="rb-title">Bloque "¿Para quién es la flotación?"</div>
+          <ul>
+            <li>Para ejecutivos y profesionales con estrés crónico acumulado</li>
+            <li>Para quienes duermen mal y se despiertan igual de cansados</li>
+            <li>Para deportistas que quieren recuperación activa (elimina inflamación muscular)</li>
+            <li>Para quienes sienten que "necesitan unas vacaciones pero no tienen tiempo"</li>
+          </ul>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Sección Nueva a Agregar</div>
+          <div class="rb-title">3 testimonios con resultado específico (texto, no solo video)</div>
+          <p>Formato ideal: nombre + edad + resultado medible. Ejemplo: <em>"Entré con dolor de espalda de 2 semanas. Salí sin él. No entiendo cómo, pero vuelvo." — Tomás V., 38 años, ingeniero.</em></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 4: FIRE & ICE
+  ════════════════════════════════════ -->
+  <section class="section" id="fire-ice">
+    <h2 class="section-title">04 · Página: Fire & Ice</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">3</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-fire">
+      <div class="page-card-header" onclick="toggle('card-fire')">
+        <span class="page-title">🔥❄️ /pages/fire-ice</span>
+        <div class="header-right">
+          <span class="score-mini red">3/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: CRÍTICO</div>
+          <div class="pb-title">H1 "Fire & Ice" — nombre, no beneficio</div>
+          <p>El cliente no sabe qué es "Fire & Ice" ni por qué debería importarle. El H1 solo nombra el producto. Nadie llega buscando "Fire & Ice" — llegan buscando recuperación, energía, rendimiento deportivo.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">Posicionamiento como "aventura" pierde al cliente de bienestar</div>
+          <p>"¡Vive la aventura de la terapia de contrastes de temperaturas!" El framing de "aventura" no conecta con el profesional urbano que busca recuperación. La ciencia del Cold Plunge/Sauna es una razón poderosa — no se usa.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #3 — Impacto: MEDIO</div>
+          <div class="pb-title">Beneficios genéricos sin especificidad</div>
+          <p>"Mejora la circulación, flexibilidad muscular, elimina toxinas" — estos beneficios están en cualquier página de spa. No hay cuánto, en cuánto tiempo, ni por qué el contraste específico de frío/calor es más efectivo que cualquier opción.</p>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">H1 Sugerido</div>
+          <div class="ce-before">✗ Antes: "Fire & Ice"</div>
+          <div class="ce-after">✓ Después: "Sauna + Cold Plunge: el protocolo de recuperación que usan los atletas de élite. Ahora para todos."</div>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">H2 Sugerido</div>
+          <div class="ce-before">✗ Antes: "¡Vive la aventura de la terapia de contrastes de temperaturas!"</div>
+          <div class="ce-after">✓ Después: "Calor extremo que abre los vasos. Frío que los cierra. El contraste activa tu sistema linfático, elimina inflamación y recarga tu energía en 45 minutos."</div>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Agregar</div>
+          <div class="rb-title">Referencia científica/cultural para credibilidad</div>
+          <p>Mencionar el protocolo Huberman/Wim Hof si aplica. El cliente objetivo (30-45, profesional, bienestar consciente) reconoce estas referencias y genera conversión inmediata.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 5: SAUNA
+  ════════════════════════════════════ -->
+  <section class="section" id="sauna">
+    <h2 class="section-title">05 · Página: Sauna</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">2</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-sauna">
+      <div class="page-card-header" onclick="toggle('card-sauna')">
+        <span class="page-title">🌡️ /pages/sauna</span>
+        <div class="header-right">
+          <span class="score-mini red">2/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: CRÍTICO</div>
+          <div class="pb-title">H1 "Sauna" + copy prácticamente inexistente</div>
+          <p>Esta página tiene menos copy que un tweet. No hay narrativa, no hay diferenciación, no hay razón para elegir el sauna de Float vs. cualquier otro en Santiago. Hay cientos de saunas en la ciudad — ¿por qué este?</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">Sin diferenciación del entorno o la experiencia</div>
+          <p>"En medio de la calidez de madera y piedras volcánicas" es lo único específico. No se menciona el tipo de sauna (seco, finlandés), temperatura, materiales únicos, música/silencio, ritual, ni qué lo hace especial vs. el sauna del gimnasio.</p>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">H1 Sugerido</div>
+          <div class="ce-before">✗ Antes: "Sauna"</div>
+          <div class="ce-after">✓ Después: "El calor que detoxifica, relaja y recarga. Sauna seco finlandés en el corazón de Vitacura."</div>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">H2 Sugerido</div>
+          <div class="ce-before">✗ Antes: "¡Siente una calurosa explosión de energía en el mundo del sauna y descubre el poder del calor extremo!"</div>
+          <div class="ce-after">✓ Después: "20 minutos a 80°C — tus músculos se sueltan, la inflamación cede y tu mente se resetea. Una práctica milenaria respaldada por la ciencia moderna."</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 6: SERVICIOS / PROGRAMAS
+  ════════════════════════════════════ -->
+  <section class="section" id="servicios">
+    <h2 class="section-title">06 · Página: Servicios / Programas</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">3</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-servicios">
+      <div class="page-card-header" onclick="toggle('card-servicios')">
+        <span class="page-title">📋 /pages/servicios · /pages/programas</span>
+        <div class="header-right">
+          <span class="score-mini red">3/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: ALTO</div>
+          <div class="pb-title">Páginas son solo grids de productos sin narrativa</div>
+          <p>Tanto "Servicios" como "Programas" son tiendas de Shopify sin copy de conversión. No hay guía de "¿cuál es el servicio para mí?", no hay contexto de por qué elegir uno u otro, no hay CTA principal claro — solo 8 cards compitiendo por atención.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #2 — Impacto: MEDIO</div>
+          <div class="pb-title">Sin orientación para el usuario indeciso</div>
+          <p>Un visitante nuevo ve 8 opciones de gift card (flotación, masaje, fire&ice, combinaciones) y no sabe por dónde empezar. No hay un "Si es tu primera vez, empieza con esto" o "El combo más popular". El usuario indeciso abandona.</p>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Recomendación</div>
+          <div class="rb-title">Agregar guía de elección "¿Cuál es para ti?"</div>
+          <ul>
+            <li>¿Tienes estrés mental y duermes mal? → Flotación</li>
+            <li>¿Tienes tensión muscular o haces deporte? → Fire & Ice o Masaje</li>
+            <li>¿Quieres la experiencia completa? → Combo Flotación + Fire & Ice</li>
+            <li>¿Primera vez en Float? → El pack inicio es el más recomendado</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 7: FAQ
+  ════════════════════════════════════ -->
+  <section class="section" id="faq">
+    <h2 class="section-title">07 · Página: FAQ</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">1</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO CRÍTICO</span>
+    </div>
+
+    <div class="alert">
+      <div class="alert-icon">🚨</div>
+      <div>
+        <div class="alert-title">BUG CRÍTICO EN PRODUCCIÓN</div>
+        <p>La página FAQ (/pages/pushdaddy-faq-1) está mostrando el texto placeholder <strong>"Your FAQ content here"</strong> en producción. No hay ninguna pregunta ni respuesta. Esta es la página más importante para resolver la principal objeción del cliente y está completamente vacía.</p>
+      </div>
+    </div>
+
+    <div class="page-card" id="card-faq">
+      <div class="page-card-header" onclick="toggle('card-faq')">
+        <span class="page-title">❓ /pages/pushdaddy-faq-1</span>
+        <div class="header-right">
+          <span class="score-mini red">1/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: CRÍTICO</div>
+          <div class="pb-title">Página de FAQ completamente vacía en producción</div>
+          <p>Cualquier usuario que navega al FAQ (menú principal incluye el link) encuentra solo "Your FAQ content here" y el grid de productos. Este es el bug más dañino del sitio — la página prometida para resolver dudas no existe.</p>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Fix Urgente + Contenido Sugerido</div>
+          <div class="rb-title">10 preguntas mínimas a agregar hoy</div>
+          <p>Gran parte del contenido ya existe en "Antes de Flotar" y puede adaptarse:</p>
+          <ul>
+            <li>¿Necesito experiencia previa para flotar?</li>
+            <li>¿Me puedo quedar dormido? ¿Es peligroso?</li>
+            <li>¿Qué hago si me entra claustrofobia?</li>
+            <li>¿Cuánto tiempo dura la sesión en total (incluyendo ducha)?</li>
+            <li>¿Puedo flotar si soy embarazada?</li>
+            <li>¿Cómo llego? ¿Hay estacionamiento?</li>
+            <li>¿Puedo cancelar o reagendar mi reserva?</li>
+            <li>¿Cuántas sesiones necesito para notar cambios?</li>
+            <li>¿Qué es el Fire & Ice? ¿Puedo hacerlo el mismo día que floto?</li>
+            <li>¿Las gift cards tienen fecha de vencimiento?</li>
+          </ul>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Oportunidad</div>
+          <div class="rb-title">El FAQ es la mejor página para resolver la objeción central</div>
+          <p>Agregar una sección específica: <strong>"¿Cómo sé si realmente me va a servir?"</strong> con respuesta que combine ciencia + testimonios + garantía de primera vez. Esta respuesta sola puede mover la aguja de conversión más que cualquier otro cambio.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 8: TESTIMONIOS
+  ════════════════════════════════════ -->
+  <section class="section" id="testimonios">
+    <h2 class="section-title">08 · Página: Testimonios</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">4</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-testimonios">
+      <div class="page-card-header" onclick="toggle('card-testimonios')">
+        <span class="page-title">💬 /pages/testimonios</span>
+        <div class="header-right">
+          <span class="score-mini red">4/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: ALTO</div>
+          <div class="pb-title">Solo videos — sin texto, sin transcripciones, sin quotes extraíbles</div>
+          <p>Los testimonios en video son valiosos, pero el cliente que llega de noche, en el metro, o en modo escaneo rápido no va a reproducir un video. Joanna Wiebe (Copyhackers) enfatiza que los mejores testimonios son los que el cliente puede leer en 10 segundos y que dicen exactamente lo que él está pensando. No hay ninguno así aquí.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">El stat "30.000 personas" está atrapado en esta página</div>
+          <p>Este número es el activo de conversión más potente del sitio y solo aparece aquí. Necesita estar en el home, en las páginas de servicio, y en el flujo de booking.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #3 — Impacto: MEDIO</div>
+          <div class="pb-title">Sin atribución ni especificidad en los testimonios</div>
+          <p>No hay nombres visibles, no hay servicios mencionados, no hay resultados específicos en texto. Un testimonio sin nombre y sin resultado específico tiene credibilidad cero (principio Peep Laja: especificidad = credibilidad).</p>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Recomendación</div>
+          <div class="rb-title">Transcribir los mejores momentos de cada video + agregar testimonios de texto</div>
+          <p>Extraer del audio de los videos las 2-3 frases más poderosas y mostrarlas como quotes de texto junto al video. Complementar con testimonios de Google Maps o Instagram reales.</p>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">Headline de Página Sugerido</div>
+          <div class="ce-before">✗ Antes: "¿Qué dicen quienes han venido a Float?"</div>
+          <div class="ce-after">✓ Después: "Más de 30.000 personas ya lo vivieron. Esto es lo que nos dijeron."</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 9: ANTES DE FLOTAR
+  ════════════════════════════════════ -->
+  <section class="section" id="antes">
+    <h2 class="section-title">09 · Página: Antes de Flotar</h2>
+
+    <div class="score-badge yellow">
+      <span class="semaforo yellow"></span>
+      <span class="num">6</span>
+      <span>/ 10 &nbsp;—&nbsp; AMARILLO</span>
+    </div>
+
+    <div class="page-card" id="card-antes">
+      <div class="page-card-header" onclick="toggle('card-antes')">
+        <span class="page-title">📖 /pages/antes-de-flotar</span>
+        <div class="header-right">
+          <span class="score-mini yellow">6/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="rec-block">
+          <div class="rb-label">Fortaleza</div>
+          <div class="rb-title">La mejor página educativa del sitio — bien estructurada y útil</div>
+          <p>H1 "Todo lo que necesitas saber si es tu primera vez" es excelente para el estado de ánimo del visitante. Responde preguntas prácticas, da contexto de la experiencia, y construye confianza. Es la página que más contribuye a resolver la objeción central.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: ALTO</div>
+          <div class="pb-title">Página escondida — no aparece en el hero ni en páginas de servicio</div>
+          <p>Esta página es extremadamente valiosa para el visitante indeciso, pero no está linkeada desde el home ni desde la página de Flotación (los lugares donde más la necesitan). Solo aparece en el footer como "Antes de Flotar". El 90% de los visitantes nunca la encuentran.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #2 — Impacto: MEDIO</div>
+          <div class="pb-title">Sin CTA de conversión al final del flujo</div>
+          <p>La página termina con "¡Nos vemos pronto en Float!" pero no tiene ningún botón de reserva. Un visitante que llega hasta el final de esta página está muy caliente para convertir — y se le ofrece solo el grid de gift cards al final. Debería haber un CTA de booking directo y destacado.</p>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Recomendación</div>
+          <div class="rb-title">Agregar link a esta página en el hero del home y en la página de Flotación</div>
+          <p>Texto del link: "¿Primera vez en Float? Lee qué esperar →" — esto reduce la fricción del visitante indeciso y lo lleva a la mejor página educativa del sitio antes de que abandone.</p>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">CTA Final a Agregar (al terminar de leer)</div>
+          <div class="ce-after">✓ Agregar botón: "Listo — quiero reservar mi primera sesión →"</div>
+          <small>Este CTA en el contexto de alguien que acaba de leer toda la info de primera vez convierte muy bien.</small>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 10: MEMBRESÍAS
+  ════════════════════════════════════ -->
+  <section class="section" id="membresias">
+    <h2 class="section-title">10 · Página: Membresías</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">3</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-mem">
+      <div class="page-card-header" onclick="toggle('card-mem')">
+        <span class="page-title">💎 /collections/membresias</span>
+        <div class="header-right">
+          <span class="score-mini red">3/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: CRÍTICO</div>
+          <div class="pb-title">Precios de $52.000 a $1.040.000 sin explicar qué incluye cada uno</div>
+          <p>Un rango de precios 20x sin ninguna tabla comparativa, sin lista de beneficios por plan, sin nombre descriptivo de cada tier. El cliente ve "Introductoria: $52.000" y "Ilimitada: $1.040.000" y no tiene ninguna información para tomar una decisión. Esto genera abandono total.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">Sin argumento de por qué hacerse miembro vs. comprar sesiones sueltas</div>
+          <p>No hay cálculo de ahorro, no hay beneficios exclusivos de membresía, no hay comunidad ni privilegios. ¿Qué gana el miembro que no gana el comprador ocasional? No se sabe. El visitante no tiene razón para comprometerse.</p>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Recomendación</div>
+          <div class="rb-title">Construir una página de membresías real con tabla comparativa</div>
+          <ul>
+            <li>Tabla con columnas por plan y filas por beneficio</li>
+            <li>Calcular y mostrar el ahorro vs. precio regular</li>
+            <li>Destacar el plan más popular (âncora)</li>
+            <li>Agregar testimonio de miembro con duración y resultado</li>
+          </ul>
+        </div>
+
+        <div class="copy-example">
+          <div class="ce-label">H1 Sugerido</div>
+          <div class="ce-before">✗ Antes: "Membresías y Planes"</div>
+          <div class="ce-after">✓ Después: "Convierte el bienestar en un hábito. Ahorra hasta 40% con tu membresía Float."</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 11: FLUJO DE BOOKING
+  ════════════════════════════════════ -->
+  <section class="section" id="booking">
+    <h2 class="section-title">11 · Flujo de Reserva (AgendaPro)</h2>
+
+    <div class="score-badge red">
+      <span class="semaforo red"></span>
+      <span class="num">3</span>
+      <span>/ 10 &nbsp;—&nbsp; ROJO</span>
+    </div>
+
+    <div class="page-card" id="card-booking">
+      <div class="page-card-header" onclick="toggle('card-booking')">
+        <span class="page-title">📅 float.agendapro.com (flujo de 5 pasos)</span>
+        <div class="header-right">
+          <span class="score-mini red">3/10</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="page-card-body">
+
+        <div class="alert">
+          <div class="alert-icon">⚠️</div>
+          <div>
+            <div class="alert-title">Durante el análisis se detectó: "Por el momento no podemos aceptar reservas"</div>
+            <p>Si este mensaje aparece en producción a clientes reales, es una pérdida directa de conversiones. Necesita verificarse si es temporal o si hay un problema sistémico con el sistema de reservas.</p>
+          </div>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #1 — Impacto: CRÍTICO</div>
+          <div class="pb-title">Requiere "dirección de entrega" para una reserva presencial</div>
+          <p>El paso 4 del flujo de reserva pide "dirección de entrega" como campo obligatorio. Esto es un error de configuración — Float no entrega nada a domicilio. Este campo genera confusión, paranoia de privacidad y abandono en el último paso del funnel.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #2 — Impacto: ALTO</div>
+          <div class="pb-title">Requiere RUT — fricción de privacidad innecesaria para primera reserva</div>
+          <p>El RUT (número de identidad nacional) es dato sensible. Pedirlo en el primer punto de contacto de un nuevo cliente genera fricción y desconfianza. Para una reserva de spa, nombre + email + teléfono debería ser suficiente para la primera sesión.</p>
+        </div>
+
+        <div class="problem-block">
+          <div class="pb-label">Problema #3 — Impacto: ALTO</div>
+          <div class="pb-title">Plataforma externa con branding diferente — ruptura de confianza</div>
+          <p>El cliente va de floatchile.cl (con sus colores, su logo) a float.agendapro.com (plataforma genérica). Este cambio visual rompe la confianza y hace que el cliente se pregunte si está en el lugar correcto. El abandono en este punto es predeciblemente alto.</p>
+        </div>
+
+        <div class="problem-block medium">
+          <div class="pb-label">Problema #4 — Impacto: MEDIO</div>
+          <div class="pb-title">5 pasos es demasiado para una reserva de spa</div>
+          <p>Mejor práctica (Unbounce): el flujo de conversión debe tener el mínimo de pasos necesarios. Para una reserva de servicio: Servicio → Horario → Datos básicos → Pago. 3-4 pasos máximo.</p>
+        </div>
+
+        <div class="rec-block">
+          <div class="rb-label">Recomendación</div>
+          <div class="rb-title">Configurar AgendaPro para reducir fricción</div>
+          <ul>
+            <li>Eliminar el campo "dirección de entrega" de inmediato</li>
+            <li>Hacer el RUT opcional (o pedirlo solo en el primer pago, no en la reserva)</li>
+            <li>Configurar el branding de AgendaPro con los colores y logo de Float Chile</li>
+            <li>Evaluar integración de widget de booking embebido en el sitio para no redirigir</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SECCIÓN 12: PLAN DE ACCIÓN
+  ════════════════════════════════════ -->
+  <section class="section" id="plan">
+    <h2 class="section-title">12 · Plan de Acción Priorizado</h2>
+
+    <h3 class="subsection">⚡ Quick Wins — Sin Tocar el Diseño, Implementables Esta Semana</h3>
+    <table class="action-table" style="margin-bottom:32px">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Acción</th>
+          <th>Página</th>
+          <th>Impacto</th>
+          <th>Esfuerzo</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Reparar página FAQ — agregar al menos 10 preguntas reales</td>
+          <td>FAQ</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Cambiar H1 de Flotación de "Flotación" a headline de beneficio</td>
+          <td>Flotación</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Cambiar CTA principal del home de "Ver Gift Cards" a "Reservar mi primera sesión →"</td>
+          <td>Home</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Agregar "Más de 30.000 personas ya lo probaron" debajo del H1 del home</td>
+          <td>Home</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Cambiar H1 de Sauna, Fire&Ice, Servicios, Programas a headlines de beneficio</td>
+          <td>Todas</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Eliminar campo "dirección de entrega" del flujo AgendaPro</td>
+          <td>Booking</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Convertir "Reserva directamente tu sesión [aquí]" en un botón real con CTA claro</td>
+          <td>Flotación, F&I, Sauna</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Agregar link "¿Primera vez? Lee qué esperar →" en hero del home y página Flotación</td>
+          <td>Home, Flotación</td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Agregar CTA de booking al final de "Antes de Flotar"</td>
+          <td>Antes de Flotar</td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Verificar y resolver el mensaje "no podemos aceptar reservas" en AgendaPro</td>
+          <td>Booking</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag quick">Quick Win</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection">🔧 Cambios Medios — 1 a 4 semanas de implementación</h3>
+    <table class="action-table" style="margin-bottom:32px">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Acción</th>
+          <th>Página</th>
+          <th>Impacto</th>
+          <th>Esfuerzo</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Agregar 3 testimonios de texto con nombre + resultado específico en cada página de servicio</td>
+          <td>Flotación, F&I, Sauna</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Reescribir copy completo de páginas Flotación, Fire&Ice, Sauna con narrativa de transformación</td>
+          <td>Servicios</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Agregar sección "¿Para quién es este servicio?" en cada página de servicio</td>
+          <td>Servicios</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Agregar guía "¿Cuál servicio es para mí?" en Servicios/Programas</td>
+          <td>Servicios</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Transcribir mejores momentos de videos de testimonios como quotes de texto</td>
+          <td>Testimonios</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Configurar branding de Float en AgendaPro (colores, logo)</td>
+          <td>Booking</td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Agregar garantía o política de primera vez visible en home y flotación</td>
+          <td>Home, Flotación</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Construir tabla comparativa real de planes de membresía</td>
+          <td>Membresías</td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Agregar referencias científicas/culturales al copy de Fire&Ice (Huberman, Cold Therapy)</td>
+          <td>Fire & Ice</td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag low">Bajo</span></td>
+          <td><span class="tag medio">Medio</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection">🚀 Cambios Grandes — 1 a 3 meses</h3>
+    <table class="action-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Acción</th>
+          <th>Página</th>
+          <th>Impacto</th>
+          <th>Esfuerzo</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Rediseñar páginas de servicio como landing pages de conversión (no tiendas Shopify). Agregar hero dedicado, copy largo, FAQs inline, testimonios, CTA sticky.</td>
+          <td>Flotación, F&I, Sauna</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag grande">Grande</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Implementar widget de booking embebido en el sitio (eliminar redirección a AgendaPro externo)</td>
+          <td>Booking</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag grande">Grande</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Crear landing page dedicada para primera sesión con garantía explícita, testimonios inline, FAQ, y CTA único. Usar para ads de adquisición.</td>
+          <td>Nueva LP</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag grande">Grande</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Implementar secuencia de email post-reserva con: preparación para la sesión, qué esperar, recordatorio, y follow-up con testimonio-recolección.</td>
+          <td>Post-booking</td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag grande">Grande</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Rediseñar página de Membresías con tabla comparativa visual, calculadora de ahorro, y plan de "miembro más popular" destacado.</td>
+          <td>Membresías</td>
+          <td><span class="tag medio">Medio</span></td>
+          <td><span class="tag alto">Alto</span></td>
+          <td><span class="tag grande">Grande</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div><!-- /wrapper -->
+
+<footer class="site-footer">
+  <p>Auditoría CRO — Float Chile &nbsp;·&nbsp; Generado en Marzo 2026 &nbsp;·&nbsp; Frameworks: Nielsen Norman Group · CXL Institute · Copyhackers · Unbounce</p>
+  <p style="margin-top:8px; color:#555">Páginas analizadas: 9 &nbsp;·&nbsp; Score promedio: 3.8/10 &nbsp;·&nbsp; Quick wins identificados: 10</p>
+</footer>
+
+<script>
+  function toggle(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
