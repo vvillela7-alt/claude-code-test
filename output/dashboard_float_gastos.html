@@ -472,6 +472,7 @@ function debug(msg) {
 async function fetchCSVText() {
   const proxies = [
     CSV_URL,
+    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(CSV_URL),
     'https://corsproxy.io/?' + encodeURIComponent(CSV_URL),
     'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL),
   ];
